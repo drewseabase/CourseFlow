@@ -196,3 +196,117 @@ export function checkOverlapWithBlocks(
 // Grid Position Calculations
 // =================================
 
+/**
+ * Converts a time to a grid row index (0-95 for 24 hrs)
+ * 
+ * @param time - the time to convert
+ * @returns Grid row index (0 = midnight, 4 = 1am, 8 = 2am etc)
+ */
+
+export function timeToGridRow(time: Date): number{
+    const hours = time.getHours();
+    const minutes = time.getMinutes();
+    const intervalIndex = Math.floor(minutes / INTERVAL_MINUTES);
+
+    return hours * INTERVALS_PER_HOUR + intervalIndex;
+}
+
+/**
+ * Converts a grid row index to a TimeSlot object
+ * 
+ * @param row - Grid to row index (0-95)
+ * @returns TimeSlot with hour and minute
+ */
+
+export function gridRowToTime(row: number): TimeSlot {
+    const hour = Math.floor(row / INTERVALS_PER_HOUR);
+    const intervalIndex = row % INTERVALS_PER_HOUR;
+    const minute = intervalIndex + INTERVAL_MINUTES;
+
+    return { hour, minute};
+}
+
+/**
+ * Calculates the height of an event block in grid rows
+ * 
+ * @param startAt - Start time of the event
+ * @param endAt - End time of the event
+ * @returns Number of grid rows the event spans
+ */
+export function calculateGridHeight(startAt: Date, endAt: Date): number {
+    const startRow = timeToGridRow(startAt);
+    const endRow = timeToGridRow(endAt);
+    return endRow - startRow;
+}
+
+
+// =================================
+// Time Formatting Helpers
+// =================================
+
+/**
+ * Formats minutes as hours and minutes string
+ * 
+ * Examples:
+ * - 90 -> "1h 30m"
+ * - 60 -> "1h"
+ * - 45 -> "45m"
+ * 
+ * @param minutes - Total minutes
+ * @returns Formatted string
+ */
+
+export function formatDuration(minutes: number): string{
+    if(minutes < 60){
+        return `${minutes}m`;
+    }
+
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    if(remainingMinutes === 0){
+        return `${hours}h`;
+    }
+    return `${hours}h ${remainingMinutes}m`;
+}
+
+/**
+ * Formats a time range as a string
+ * 
+ * Example: "2:00 PM - 3:30PM"
+ * 
+ * @param startAt - Start time
+ * @param endAt - End time
+ * @returns Formatted time range string
+ */
+
+export function formatTimeRange(startAt: Date, endAt: Date): string{
+    const startTime = startAt.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+    });
+
+    const endTime = endAt.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+    });
+
+    return `${startTime} - ${endTime}`;
+}
+
+/**
+ * Checks if a time is on the same day as another time 
+ * 
+ * @param date1 - First Date
+ * @param date2 - Second Date
+ * @returns true if both dates are on the same day
+ */
+export function isSameDay(date1: Date, date2: Date): boolean {
+    return(
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
+    );
+}
