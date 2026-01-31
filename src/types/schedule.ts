@@ -221,7 +221,7 @@ export interface LoadMockDataAction{
  * Union type of all possible actions
  * This ensures type safety in the reducer
  */
-export type SchedyleAction = 
+export type ScheduleAction = 
 | MoveBlockAction
 | AdjustDurationAction 
 | ToggleLockAction
