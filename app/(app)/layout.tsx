@@ -1,28 +1,46 @@
-import Link from "next/link";
+/**
+ * App Layout
+ * 
+ * This is the nested layout for the /app routes (calendar, today, settings).
+ * It provides:
+ * - Navigation structure (sider/header)
+ * - Schedule State context (via ScheduleProvider)
+ * - Shared layout elements for all app pages
+ * 
+ * This layout wraps all routes within the (app) folder.
+ */
+import { ScheduleProvider } from "@/lib/state/schedule-context";
+import React from "react";
 
-const nav = [
-    {href: "/calendar", label: "Calendar"},
-    {href: "/today", label: "Today"},
-    {href: "/settings", label: "Settings"},
-];
+/**
+ * Props for the App Layout component
+ */
+interface AppLayoutProps {
+    children: React.ReactNode;
+}
 
-export default function AppLayout({children}: {children: React.ReactNode}){
+/**
+ * App Layout component
+ * 
+ * Wraps all app routes with the ScheduleProvider to make 
+ * schedule state available throughout the application
+ * 
+ * The ScheduleProvider must wrap all routes that need access to schedule data
+ * (Calendar, Today, Settings pages)
+ * 
+ * @param props - Layout props containing children
+ * @returns Layout component with navigation provider
+ */
+export default function AppLayout({children}: AppLayoutProps){
     return(
-        <div className="min-h-screen">
-            <header className="border-b">
-                <nav className="mx-auto flex max-w-5xl items-center gap-6 p-4">
-                    <span className="font-semibold">CourseFlow</span>
-                    <div className="flex gap-4">
-                        {nav.map((item)=> (
-                            <Link key={item.href} href={item.href} className="hover:underline">
-                                {item.label}
-                            </Link>
-                        ))}
-                    </div>
-                </nav>
-            </header>
-
-            <main className="mx-auto max-w-5xl p-4">{children}</main>
-        </div>
-    )
+        <ScheduleProvider>
+            {/* All routes inside (app)/ folder will have access to schedule state
+            This includes:
+            - /calendar
+            - /today
+            - /settings
+             */}
+            {children}
+        </ScheduleProvider>
+    );
 }
