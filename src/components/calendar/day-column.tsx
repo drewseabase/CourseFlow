@@ -14,7 +14,7 @@ import { FixedEvent, ScheduleBlock } from "@/types/schedule";
 import { EventBlock } from "./event-block";
 import { formatShortDayName, formatMonthDay, isSameDay } from "@/lib/utils/date-helpers";
 import { timeToGridRow, calculateGridHeight } from "@/lib/utils/time";
-import {useDragDrop} from "@/hooks/use-drag-drop";
+import { useDragDrop } from "@/hooks/use-drag-drop";
 
 /**
  * Props for DayColumn component

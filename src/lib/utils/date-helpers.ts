@@ -48,6 +48,16 @@ export function getNextWeek(currentWeekStart: Date): Date{
 }
 
 /**
+ * Gets the start of the previous week (subtracts 7 days from monday)
+ * 
+ * @param currentWeekStart - Monday of the current week
+ * @returns Monday of the previous week
+ */
+export function getPreviousWeek(currentWeekStart: Date): Date{
+    return subWeeks(currentWeekStart, 1);
+}
+
+/**
  * Gets an array of all 7 days in a week (Monday through Sunday)
  * 
  * @param weekStart - Monday of the week
