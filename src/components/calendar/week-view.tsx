@@ -13,7 +13,7 @@ import React from "react";
 import { useSchedule } from "@/hooks/use-schedule";
 import { WeekGrid } from "./week-grid";
 import {MobileCalendar} from "./mobile-calendar";
-import {useMobileDetect} from "@/hooks/use-mobile-detect";
+import { useMobileDetect } from "@/hooks/use-mobile-detect";
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { formatWeekRange, getNextWeek, getPreviousWeek, getWeekStart } from "@/lib/utils/date-helpers";
