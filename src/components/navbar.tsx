@@ -28,7 +28,7 @@ export default function Navbar() {
         
 
         {/* Desktop Navigation Tabs */}
-        <div className="items-center gap-2 bg-[#FAFAFA] p-1.5 rounded-xl">
+        <div className="items-center gap-2 bg-[#FAFAFA] p-1.5 rounded-xl tracking-wide">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -37,7 +37,7 @@ export default function Navbar() {
                 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200
                 ${
                   isActive(item.href)
-                    ? 'bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)] text-[#18181B]'
+                    ? 'bg-white border-2 border-indigo-500 shadow-[0_6px_18px_rgba(102,126,234,0.25)] text-[#18181B]'
                     : `bg-transparent text-[#52525B] hover:bg-linear-to-r 
                     hover:from-[#667eea] hover:to-[#764ba2] hover:text-white hover:shadow-[0_4px_12px_rgba(102,126,234,0.35)]`
                 }
