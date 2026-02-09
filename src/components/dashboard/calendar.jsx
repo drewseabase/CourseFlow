@@ -6,7 +6,7 @@ export default function Calendar(){
     const today = new Date();
 
     //State to track current month and year being displayed
-    const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+    const[currentMonth, setCurrentMonth] = useState(today.getMonth());
     const[currentYear, setCurrentYear] = useState(today.getFullYear());
 
     //Array of months
@@ -121,14 +121,12 @@ export default function Calendar(){
                 {/*Navigation Controls*/}
                 <div className='flex gap-3'>
                     {/*Previous Month Button*/}
-                    <button onClick={previousMonth} className='w-10 h-10 border-0 rounded-[10px] bg-[#FAFAFA]
-                    cursor-pointer text-lg transition-all duration-200 hover:scale-110 hover:bg-[#E4E4E7]' aria-label="Previous Month">
+                    <button onClick={previousMonth} className='w-10 h-10 border-0 rounded-[10px] bg-[#FAFAFA] cursor-pointer text-lg transition-all duration-200 hover:scale-110 hover:bg-[#E4E4E7]' aria-label="Previous Month">
                         ◀
                     </button>
 
                     {/*Next Month Button*/}
-                    <button onClick={nextMonth} className='w-10 h-10 border-0 rounded-[10px] bg-[#FAFAFA]
-                    cursor-pointer text-lg transition-all duration-200 hover:scale-110 hover:bg-[#E4E4E7]' aria-label='Next Month'>
+                    <button onClick={nextMonth} className='w-10 h-10 border-0 rounded-[10px] bg-[#FAFAFA] cursor-pointer text-lg transition-all duration-200 hover:scale-110 hover:bg-[#E4E4E7]' aria-label='Next Month'>
                         ▶
                     </button>
                 </div>
@@ -155,9 +153,7 @@ export default function Calendar(){
                     const hasEventIndicator = hasEvent(dayObj.day);
 
                     return(
-                        <div key={`day-${dayObj.day}`} className={`aspect-square rounded-[14px] flex flex-col 
-                            items-center justify-center cursor-pointer transition-all duration-200 relative 
-                            ${isTodayDate ? 'bg-linear-to-br from-[#667eea] to-[#764ba2] text-white font-bold' : 'bg-[#FAFAFA] hover:scale-105 hover:bg-[#E4E4E7]'}`}>
+                        <div key={`day-${dayObj.day}`} className={`aspect-square rounded-[14px] flex flex-col items-center justify-center cursor-pointer transition-all duration-200 relative ${isTodayDate ? 'bg-linear-to-br from-[#667eea] to-[#764ba2] text-white font-bold' : 'bg-[#FAFAFA] hover:scale-105 hover:bg-[#E4E4E7]'}`}>
                                 {/*Day Number*/}
                                 <div className='text-base font-semibold'>
                                     {dayObj.day}
