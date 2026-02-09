@@ -18,7 +18,7 @@ export default function Navbar() {
   const isActive = (href: string) => pathname === href;
 
   return (
-    <nav className="mx-auto max-w-4xl px-12 p-6 bg-[#FFFFFF] rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] backdrop-blur-[10px]">
+    <nav className="mx-auto max-w-4xl mb-16 px-12 p-6 bg-[#FFFFFF] rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] backdrop-blur-[10px]">
       <div className="flex justify-between items-center">
         {/* Logo */}
         
