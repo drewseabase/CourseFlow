@@ -10,14 +10,14 @@ export default function DashboardPage() {
       {/*Main Content*/}
       <div className="max-w-375 mx-auto px-10 py-10">
         <main>
-          <div className="grid grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-3 gap-12 mb-12">
             <WeekOverview />
             <TasksThisWeek />
             <StudyHours />
           </div>
 
           <div className="grid grid-cols-3 gap-12">
-            <div className="col-span-1 w-102">
+            <div className="col-span-1 w-97">
               <TodaysFocus />
             </div>
             <div className="col-span-2">
