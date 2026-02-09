@@ -1,4 +1,25 @@
+'use client';
+
 export default function TodaysFocus() {
+  // Get current date
+  const today = new Date();
+  
+  /**
+   * Format today's date as "DayName, Mon DD"
+   * Example: "Monday, Feb 09"
+   * @returns {string} Formatted date string
+   */
+  const getFormattedDate = () => {
+    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const dayName = dayNames[today.getDay()];
+    const monthName = monthNames[today.getMonth()];
+    const date = today.getDate();
+    
+    return `${dayName}, ${monthName} ${date}`;
+  };
+
   const tasks = [
     {
       id: 1,
@@ -34,7 +55,7 @@ export default function TodaysFocus() {
           Today's Focus
         </div>
         <div className="text-[14px] text-[#52525B]">
-          Wednesday, Feb 7
+          {getFormattedDate()}
         </div>
       </div>
 
@@ -74,10 +95,10 @@ export default function TodaysFocus() {
 
             {/* Task Actions */}
             <div className="flex gap-2 mt-4">
-              <button className={`flex-1 py-2.5 px-4 rounded-[10px] font-semibold text-[13px] text-white bg-linear-to-r ${task.gradientClass} border-0 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer`}>
+              <button className={`flex-1 py-2.5 px-4 rounded-[10px] font-semibold text-[13px] text-white bg-linear-to-r ${task.gradientClass} border-0 transition-all duration-200 hover:-translate-y-0.5`}>
                 Start
               </button>
-              <button className="flex-1 py-2.5 px-4 rounded-[10px] font-semibold text-[13px] bg-transparent border-2 border-[#E4E4E7] transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">
+              <button className="flex-1 py-2.5 px-4 rounded-[10px] font-semibold text-[13px] bg-transparent border-2 border-[#E4E4E7] transition-all duration-200 hover:-translate-y-0.5">
                 Skip
               </button>
             </div>
