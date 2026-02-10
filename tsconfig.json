@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "src/components/dashboard/weekoverview.jsx"  ],
+, "src/components/dashboard/weekoverview.jsx", "src/components/dashboard/calendar.jsx", "src/components/dashboard/calendar.jsx", "src/components/dashboard/calendar.jsx"  ],
   "exclude": ["node_modules"]
 }

@@ -1,7 +1,6 @@
 export default function WeekOverview(){
     return(
-        <div className="relative overflow-hidden bg-white rounded-[20px] p-6 
-        shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+        <div className="relative overflow-hidden bg-white rounded-[20px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
             {/*Top Gradient Border*/}
             <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-[#667eea] to-[#764ba2]"></div>
                 <div className="text-[13px] font-semibold uppercase tracking-[0.5px] text-[#A1A1AA] mb-2">
