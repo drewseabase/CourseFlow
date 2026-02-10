@@ -37,7 +37,7 @@ export default function Navbar() {
                 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200
                 ${
                   isActive(item.href)
-                    ? 'bg-white border-2 border-indigo-500 shadow-[0_6px_18px_rgba(102,126,234,0.25)] text-[#18181B]'
+                    ? 'bg-[#667eea] shadow-[0_6px_18px_rgba(102,126,234,0.25)] text-white'
                     : `bg-transparent text-[#52525B] hover:bg-linear-to-r 
                     hover:from-[#667eea] hover:to-[#764ba2] hover:text-white hover:shadow-[0_4px_12px_rgba(102,126,234,0.35)]`
                 }
