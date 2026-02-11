@@ -144,7 +144,7 @@ export default function CalendarPage() {
     : [];
   
   return (
-    <main className="max-w-675 mx-auto px-6 py-6 ml-60">
+    <main className="max-w-675 mx-auto px-6 py-6 ml-40">
       {/* Calendar Controls */}
       <CalendarControls
         currentDate={currentDate}
