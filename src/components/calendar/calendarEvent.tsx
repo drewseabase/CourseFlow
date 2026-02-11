@@ -70,7 +70,7 @@ export default function CalendarEventCard({event, viewType, style}: CalendarEven
 
         //Different styles for different event types
        if(event.type === 'class'){
-        return `${baseClasses} border-2 border-opacity-50`;
+        return `${baseClasses} border-none border-opacity-50`;
        }else if(event.type === 'work'){
         return `${baseClasses} bg-gradient-to-br ${event.color}`;
        }else if (event.type === 'personal'){
