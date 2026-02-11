@@ -151,13 +151,13 @@ export default function CalendarEventCard({event, viewType, style}: CalendarEven
 
                 {/*Course Name*/}
                 {event.course && (
-                    <div className="text-sm text-white opacity-80 mb-2">
+                    <div className="text-s text-white opacity-80 mb-2">
                         {event.course}
                     </div>
                 )}
 
                 {/*Duration*/}
-                <div className="text-xs text-white opacity-70">
+                <div className="text-s text-white opacity-70">
                     {event.duration} minutes
                 </div>
             </div>

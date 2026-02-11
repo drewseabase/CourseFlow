@@ -66,7 +66,7 @@ function calculateEventStyle(
 }
 
 export default function DayView({date, events}: DayViewProps){
-    const CELL_HEIGHT = 100;
+    const CELL_HEIGHT = 70;
 
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const monthNames = ['Jan', 'Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -83,19 +83,19 @@ export default function DayView({date, events}: DayViewProps){
         <div className={`p-7 ${panel}`}>
             {/*Day Header*/}
             <div className="mb-6 pb-6 border-b border-[#E4E4E7]">
-                <div className="text-[35px] font-bold uppercase tracking-wide text-[#A1A1AA]. mb-2">
+                <div className="text-[25px] font-bold uppercase tracking-wide text-[#A1A1AA]. mb-2">
                     {dayName}
                 </div>
-                <div className="text-[25px] font-bold text-[#18181B] mb-2">
+                <div className="text-[14px] font-bold text-[#18181B] mb-2">
                     {monthName} {dayNumber}
                 </div>
-                <div className="text-[15px] text-[#52525B] mt-1">
+                <div className="text-[13px] text-[#52525B] mt-1">
                     {events.length} {events.length === 1 ? 'event' : 'events'} scheduled
                 </div>
             </div>
 
             {/*Scrollable Container for 24-hour view*/}
-            <div className="overflow-auto max-h-150 rounded-xl border border-[#E4E4E7]">
+            <div className="overflow-auto max-h-100 rounded-xl border border-[#E4E4E7]">
                 {/*Time slot grid*/}
                 <div className="grid w-full" style={{gridTemplateColumns: '80px 1fr'}}>
                     {/*Time Slot Rows*/}

@@ -130,7 +130,7 @@ export default function WeekView({ weekStart, events }: WeekViewProps) {
       {/* Scrollable container for 24-hour view */}
       <div
         ref={scrollRef}
-        className="overflow-auto max-h-150 rounded-xl border border-[#E4E4E7]"
+        className="overflow-auto max-h-120 rounded-xl border border-[#E4E4E7]"
       >
         {/* Calendar Grid */}
         <div className="grid w-full gap-0" style={{ gridTemplateColumns: '80px repeat(7, minmax(120px, 1fr))' }}>
