@@ -1,4 +1,3 @@
-
 import { CalendarEvent } from "@/lib/mock/calendardatagenerator"
 
 interface CalendarLegendProps{
@@ -97,8 +96,12 @@ export default function CalendarLegend({events, viewType}: CalendarLegendProps){
         return null;
     }
 
+    // Option A surface token
+    const panel =
+        'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
+
     return(
-        <div className="flex flex-wrap gap-6 mb-5 pb-5 border-b border-[#e4e4e7]">
+        <div className={`flex flex-wrap gap-6 mb-5 p-5 ${panel}`}>
             {categories.map((category) =>(
                 <div key={category.label} className="flex items-center gap-2">
                     {/*Color Swatch */}   

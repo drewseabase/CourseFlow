@@ -75,8 +75,12 @@ export default function DayView({date, events}: DayViewProps){
     const monthName = monthNames[date.getMonth()];
     const dayNumber = date.getDate();
 
+    // Option A surface token
+    const panel =
+        'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
+
     return(
-        <div className="bg-white rounded-[20px] p-7 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+        <div className={`p-7 ${panel}`}>
             {/*Day Header*/}
             <div className="mb-6 pb-6 border-b border-[#E4E4E7]">
                 <div className="text-[35px] font-bold uppercase tracking-wide text-[#A1A1AA]. mb-2">

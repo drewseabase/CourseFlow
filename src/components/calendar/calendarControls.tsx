@@ -76,8 +76,13 @@ export default function CalendarControls({
   onViewChange,
   onNavigate
 }: CalendarControlsProps) {
+
+  // Option A surface token
+  const panel =
+    'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
+
   return (
-    <div className="flex justify-between items-center mb-6 p-5 bg-white rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+    <div className={`flex justify-between items-center mb-6 p-5 ${panel}`}>
       {/* Left side: Date Navigation */}
       <div className="flex gap-0 items-center">
         {/* Previous Button */}

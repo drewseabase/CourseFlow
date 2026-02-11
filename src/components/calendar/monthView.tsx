@@ -135,9 +135,13 @@ export default function MonthView({ monthStart, events, selectedDate, onDayClick
   }
   
   const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  // Option A surface token
+  const panel =
+    'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
   
   return (
-    <div className="bg-white rounded-[20px] p-7 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+    <div className={`p-7 ${panel}`}>
       {/* Calendar Grid */}
       <div className="grid grid-cols-7 gap-2">
         {/* Day Headers */}

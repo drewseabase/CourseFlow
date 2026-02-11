@@ -18,105 +18,102 @@ export default function Navbar() {
   const isActive = (href: string) => pathname === href;
 
   return (
-    <nav className="mx-auto max-w-4xl mb-16 px-12 p-6 bg-[#FFFFFF] rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] backdrop-blur-[10px]">
-      <div className="flex justify-between items-center">
-        {/* Logo */}
-        
-        <h1 className="text-[32px] font-bold bg-linear-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
-            CourseFlow
-        </h1>
-        
+    <aside
+      className={[
+        // Position + size
+        'fixed left-0 top-20 bottom-20 z-40',
+        mobileMenuOpen ? 'w-21 px-2 py-4' : 'w-65 p-4',
 
-        {/* Desktop Navigation Tabs */}
-        <div className="items-center gap-2 bg-[#FAFAFA] p-1.5 rounded-xl tracking-wide">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`
-                px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200
-                ${
-                  isActive(item.href)
-                    ? 'bg-[#667eea] shadow-[0_6px_18px_rgba(102,126,234,0.25)] text-white'
-                    : `bg-transparent text-[#52525B] hover:bg-linear-to-r 
-                    hover:from-[#667eea] hover:to-[#764ba2] hover:text-white hover:shadow-[0_4px_12px_rgba(102,126,234,0.35)]`
-                }
-              `}
-            >
-              {item.name}
-            </Link>
-          ))}
-        </div>
+        'bg-white/85 backdrop-blur-md',
+        'border border-zinc-200/70',
+        'rounded-r-3xl',
+        'shadow-sm',
 
-        {/* Desktop Actions */}
-        <div className="hidden md:flex items-center gap-3">
-          <button
-            className="px-6 py-3 rounded-xl bg-linear-to-r from-[#667eea] to-[#764ba2] text-white font-semibold text-sm shadow-[0_4px_12px_rgba(102,126,234,0.4)] hover:shadow-[0_8px_20px_rgba(102,126,234,0.5)] hover:-translate-y-0.5 transition-all duration-300"
-          >
-            + Add Task
-          </button>
-        </div>
-
-        {/* Mobile Menu Button */}
+        // Layout
+        'flex flex-col gap-3',
+      ].join(' ')}
+    >
+      {/* Primary action (ONLY gradient button in the sidebar) */}
+      <div className="flex items-center justify-center">
         <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 text-[#52525B] hover:text-[#18181B]"
-          aria-label="Toggle menu"
+          className={[
+            'w-full rounded-2xl px-4 py-3',
+            'bg-linear-to-r from-[#667eea] to-[#764ba2] text-white',
+            'font-semibold text-sm',
+            'shadow-[0_6px_18px_rgba(102,126,234,0.22)]',
+            'hover:shadow-[0_10px_26px_rgba(102,126,234,0.30)]',
+            'hover:-translate-y-0.5 transition-all duration-200',
+          ].join(' ')}
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            {mobileMenuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
+          {mobileMenuOpen ? '+' : '+ Add Task'}
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden mt-4 pt-4 border-t border-[#E4E4E7]">
-          <div className="flex flex-col gap-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`
-                  px-4 py-3 rounded-lg font-semibold text-sm transition-all duration-200
-                  ${
-                    isActive(item.href)
-                      ? 'bg-[#FAFAFA] text-[#18181B]'
-                      : 'text-[#52525B] hover:bg-[#FAFAFA] hover:text-[#18181B]'
-                  }
-                `}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <button
-              className="mt-2 px-4 py-3 rounded-xl bg-linear-to-r from-[#667eea] to-[#764ba2] text-white font-semibold text-sm shadow-[0_4px_12px_rgba(102,126,234,0.4)]"
-            >
-              + Add Task
-            </button>
-          </div>
-        </div>
-      )}
-    </nav>
+      {/* Nav */}
+      <nav className="flex flex-col gap-1">
+        {navItems.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={[
+              'rounded-2xl px-3 py-2.5',
+              'text-sm font-semibold',
+              'transition-all duration-200',
+
+              // Collapsed state
+              mobileMenuOpen ? 'px-0 flex justify-center' : '',
+
+              // Active vs default vs hover
+              isActive(item.href)
+                ? 'bg-zinc-100 text-zinc-900'
+                : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900',
+            ].join(' ')}
+          >
+            {mobileMenuOpen ? <span className="text-xl leading-none">•</span> : item.name}
+          </Link>
+        ))}
+      </nav>
+
+      {/* Filters */}
+      <div className="mt-auto flex flex-col gap-2 text-zinc-600">
+        {!mobileMenuOpen && (
+          <small className="text-xs font-medium tracking-wide text-zinc-500 px-1">
+            Filters
+          </small>
+        )}
+
+        <label className={['flex items-center gap-2', mobileMenuOpen ? 'justify-center' : 'px-1'].join(' ')}>
+          <input type="checkbox" defaultChecked className="accent-[#667eea]" />
+          {!mobileMenuOpen && <span className="text-sm">Classes</span>}
+        </label>
+
+        <label className={['flex items-center gap-2', mobileMenuOpen ? 'justify-center' : 'px-1'].join(' ')}>
+          <input type="checkbox" defaultChecked className="accent-[#667eea]" />
+          {!mobileMenuOpen && <span className="text-sm">Work</span>}
+        </label>
+
+        <label className={['flex items-center gap-2', mobileMenuOpen ? 'justify-center' : 'px-1'].join(' ')}>
+          <input type="checkbox" defaultChecked className="accent-[#667eea]" />
+          {!mobileMenuOpen && <span className="text-sm">Personal</span>}
+        </label>
+      </div>
+
+      {/* Collapse toggle (neutral button) */}
+      <button
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        className={[
+          'mt-3 w-full h-11 rounded-2xl',
+          'border border-zinc-200/70',
+          'bg-zinc-100 text-zinc-800',
+          'hover:bg-zinc-200 transition-all duration-200',
+          'font-semibold',
+        ].join(' ')}
+        aria-label="Toggle sidebar"
+        title="Toggle sidebar"
+      >
+        ☰
+      </button>
+    </aside>
   );
 }
+

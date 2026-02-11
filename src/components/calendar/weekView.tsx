@@ -120,9 +120,13 @@ export default function WeekView({ weekStart, events }: WeekViewProps) {
     const currentHour = new Date().getHours();
     scrollRef.current.scrollTop = currentHour * CELL_HEIGHT;
   }, []);
+
+  // Option A surface token
+  const panel =
+    'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
   
   return (
-    <div className="bg-white rounded-[20px] p-7 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+    <div className={`p-7 ${panel}`}>
       {/* Scrollable container for 24-hour view */}
       <div
         ref={scrollRef}
@@ -200,3 +204,4 @@ export default function WeekView({ weekStart, events }: WeekViewProps) {
     </div>
   );
 }
+

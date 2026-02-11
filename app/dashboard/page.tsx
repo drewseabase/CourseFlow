@@ -74,10 +74,10 @@ export default function Dashboard() {
   return (
     <>
       {/*Main Content*/}
-      <div className="max-w-375 mx-auto px-10 py-10">
+      <div className="max-w-375 mx-auto px-10 py-10 ml-20">
         <main>
           {/* Top Row: Stats Dashboard - 3 cards */}
-          <div className="grid grid-cols-3 gap-12 mb-12">
+          <div className="grid grid-cols-3 gap-5 mb-8">
             <WeekOverview />
             <TasksThisWeek />
             <StudyHours />
