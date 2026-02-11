@@ -110,7 +110,7 @@ export default function WeekView({ weekStart, events }: WeekViewProps) {
   const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   
   // Height of each hour cell in pixels
-  const CELL_HEIGHT = 80;
+  const CELL_HEIGHT = 35;
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -154,7 +154,7 @@ export default function WeekView({ weekStart, events }: WeekViewProps) {
               <div className={`text-[11px] font-bold uppercase tracking-wide mb-1 ${isToday(day) ? 'text-white' : 'text-[#A1A1AA]'}`}>
                 {dayNames[index]}
               </div>
-              <div className={`text-[20px] font-bold ${isToday(day) ? 'text-white' : 'text-[#18181B]'}`}>
+              <div className={`text-[15px] font-bold ${isToday(day) ? 'text-white' : 'text-[#18181B]'}`}>
                 {day.getDate()}
               </div>
             </div>

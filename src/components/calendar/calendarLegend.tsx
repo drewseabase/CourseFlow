@@ -103,7 +103,7 @@ export default function CalendarLegend({events, viewType}: CalendarLegendProps){
     return(
         <div className={`flex flex-wrap gap-6 mb-5 p-5 ${panel}`}>
             {categories.map((category) =>(
-                <div key={category.label} className="flex items-center gap-2">
+                <div key={category.label} className="flex items-center gap-1">
                     {/*Color Swatch */}   
                     <ColorSwatch color={category.color} type={category.type}/>
 

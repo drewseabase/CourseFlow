@@ -82,13 +82,13 @@ export default function CalendarControls({
     'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
 
   return (
-    <div className={`flex justify-between items-center mb-6 p-5 ${panel}`}>
+    <div className={`flex justify-between items-center mb-6 p-1.5 ${panel}`}>
       {/* Left side: Date Navigation */}
       <div className="flex gap-0 items-center">
         {/* Previous Button */}
         <button
           onClick={() => onNavigate('prev')}
-          className="w-10 h-10 border-0 rounded-[10px] bg-[#FAFAFA] cursor-pointer text-lg transition-all duration-200 hover:scale-110 hover:bg-[#E4E4E7]"
+          className="w-10 h-10 ml-4 border-0 rounded-[10px] bg-[#FAFAFA] cursor-pointer text-lg transition-all duration-200 hover:scale-110 hover:bg-[#E4E4E7]"
           aria-label="Previous"
         >
           ◀
