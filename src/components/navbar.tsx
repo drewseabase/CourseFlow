@@ -21,7 +21,7 @@ export default function Navbar() {
     <aside
       className={[
         // Position + size
-        'fixed left-0 top-18 bottom-20 z-40',
+        'fixed left-0 top-28 bottom-20 z-40',
         mobileMenuOpen ? 'w-21 px-2 py-4' : 'w-40 p-4',
 
         'bg-white/85 backdrop-blur-md',
