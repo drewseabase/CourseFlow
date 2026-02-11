@@ -160,11 +160,6 @@ export default function CalendarEventCard({event, viewType, style}: CalendarEven
                 <div className="text-xs text-white opacity-70">
                     {event.duration} minutes
                 </div>
-
-                {/*Event type badge*/}
-                <div className="mt-2 inline-block px-2 py-1 bg-white bg-opacity-20 rounded text-[10px] font-semibold text-white uppercase tracking-wide">
-                    {event.type}
-                </div>
             </div>
         );
     }

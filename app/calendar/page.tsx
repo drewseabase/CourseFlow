@@ -21,6 +21,7 @@ import { useState, useEffect } from "react";
 import CalendarControls from "@/components/calendar/calendarControls";
 import CalendarLegend from "@/components/calendar/calendarLegend";
 import WeekView from "@/components/calendar/weekView";
+import DayView from "@/components/calendar/dayView";
 import { generateCalendarEvents, getEventsForDay, getEventsForWeek, getEventsForMonth, getWeekStart, getMonthStart, CalendarEvent } from "@/lib/mock/calendardatagenerator";
 
 export default function CalendarPage() {
@@ -157,6 +158,11 @@ export default function CalendarPage() {
         {viewType === 'week' && (
             <WeekView weekStart = {getWeekStart(currentDate)} events = {viewEvents}/>
         )}
+
+        {viewType === 'day' && (
+            <DayView date = {currentDate} events = {viewEvents}/>
+        )}
+        
       </div>
     </main>
 );
