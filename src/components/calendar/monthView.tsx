@@ -136,7 +136,6 @@ export default function MonthView({ monthStart, events, selectedDate, onDayClick
   
   const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-  // Option A surface token
   const panel =
     'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
   
