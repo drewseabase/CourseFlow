@@ -39,10 +39,13 @@ export default function TodaysFocus({ selectedDate, tasks }) {
     return `${dayName}, ${monthName} ${date}`;
   };
 
+  const panel =
+    'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
+
   return (
     <div className="flex flex-col gap-4">
       {/* Panel Header */}
-      <div className="bg-white rounded-[20px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+      <div className={`p-6 ${panel}`}>
         <div className="text-[20px] font-bold mb-2">
           Today's Focus
         </div>
@@ -58,7 +61,7 @@ export default function TodaysFocus({ selectedDate, tasks }) {
           tasks.map((task) => (
             <div
               key={task.id}
-              className="relative overflow-hidden bg-white rounded-2xl p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(0,0,0,0.12)]"
+              className={`relative overflow-hidden rounded-2xl p-5 cursor-pointer transition-all duration-300 hover:-translate-y-1 ${panel}`}
             >
               {/* Left gradient border */}
               <div className={`absolute left-0 top-0 bottom-0 w-1 bg-linear-to-b ${task.gradientClass}`}></div>
@@ -100,7 +103,7 @@ export default function TodaysFocus({ selectedDate, tasks }) {
           ))
         ) : (
           /* Empty State - No tasks for this day */
-          <div className="bg-white rounded-2xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)] text-center">
+          <div className={`p-8 text-center ${panel}`}>
             <div className="text-[48px] mb-4">📅</div>
             <div className="text-[18px] font-semibold text-[#18181B] mb-2">
               No Tasks Scheduled

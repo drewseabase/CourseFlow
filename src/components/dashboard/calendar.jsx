@@ -158,8 +158,11 @@ export default function Calendar({ selectedDate, onDateSelect, tasksMap }) {
 
   const calendarDays = generateCalendarDays();
 
+  const panel =
+    'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
+
   return (
-    <div className="bg-white rounded-[20px] p-7 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+    <div className={`p-7 ${panel}`}>
       {/* Calendar Header - Month/Year display and navigation controls */}
       <div className="flex justify-between items-center mb-6">
         <div className="text-[24px] font-bold">

@@ -1,6 +1,10 @@
 export default function StudyHours(){
+
+    const panel =
+        'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-2xl shadow-sm';
+
     return (
-        <div className="relative overflow-hidden bg-white rounded-[20px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+        <div className={`relative overflow-hidden p-5 ${panel}`}>
             {/*Top gradient border*/}
             <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-[#43e97b] to-[#38f9d7]"></div>
 
