@@ -19,6 +19,7 @@
 'use client'
 import { useState, useEffect } from "react";
 import CalendarControls from "@/components/calendar/calendarControls";
+import CalendarLegend from "@/components/calendar/calendarLegend";
 import { generateCalendarEvents, getEventsForDay, getEventsForWeek, getEventsForMonth, getWeekStart, getMonthStart, CalendarEvent } from "@/lib/mock/calendardatagenerator";
 
 export default function CalendarPage() {
@@ -147,6 +148,10 @@ export default function CalendarPage() {
         onViewChange={handleViewChange}
         onNavigate={handleNavigate}
       />
+      {/*Calendar Container*/}
+      <div className="bg-white rounded-[20px] p-7 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+        <CalendarLegend events={viewEvents} viewType = {viewType}/>
+      </div>
     </main>
 );
 }
