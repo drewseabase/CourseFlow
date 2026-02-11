@@ -139,7 +139,7 @@ export const SLEEP_SCHEDULE = {
 export const ASSIGNMENT_TEMPLATES = [
     {
         type: "Problem Set",
-        courses: ["Physics 201", "Calculis III"],
+        courses: ["Physics 201", "Calculus III"],
         durationRange: [90, 150] // 1.5 to 2.5 hours
     },
     {

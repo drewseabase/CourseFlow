@@ -34,7 +34,7 @@ function extractCategories(events: CalendarEvent[]): Array<{label: string; color
         }else if (event.type === 'task'){
             if(event.course){
                 key = `task-${event.course}`;
-                label = `${event.course} (Task)`;
+                label = `${event.course}`;
                 color = event.color;
             }else{
                 key = 'tasks';
@@ -105,7 +105,7 @@ export default function CalendarLegend({events, viewType}: CalendarLegendProps){
                     <ColorSwatch color={category.color} type={category.type}/>
 
                     {/*Label*/} 
-                    <div className="text-[13px] font-medium text-[#52525B]">
+                    <div className="text-[13px] font-medium text-[#52525B] tracking-wider">
                         {category.label}
                     </div>
                 </div>
