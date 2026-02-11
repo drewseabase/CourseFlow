@@ -23,6 +23,7 @@ import CalendarLegend from "@/components/calendar/calendarLegend";
 import WeekView from "@/components/calendar/weekView";
 import DayView from "@/components/calendar/dayView";
 import MonthView from "@/components/calendar/monthView";
+import EventModal from "@/components/calendar/eventModal";
 import { generateCalendarEvents, getEventsForDay, getEventsForWeek, getEventsForMonth, getWeekStart, getMonthStart, CalendarEvent } from "@/lib/mock/calendardatagenerator";
 
 export default function CalendarPage() {
@@ -169,6 +170,8 @@ export default function CalendarPage() {
         )}
       </div>
 
+        {/*Event Modal*/}
+        <EventModal date = {selectedModalDate} events = {modalEvents} isOpen={modalOpen} onClose={handleCloseModal}/>
 
     </main>
 );
