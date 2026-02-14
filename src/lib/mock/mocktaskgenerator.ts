@@ -19,6 +19,7 @@ export interface Task {
   dueDate: string;         // e.g., "Due Friday"
   gradientClass: string;   // Tailwind gradient class
   dateKey: string;         // Date in YYYY-MM-DD format for lookup
+  course: string;
 }
 
 /**
@@ -199,6 +200,7 @@ const generateSingleTask = (
     dueDate: dueDateString,
     gradientClass,
     dateKey: getDateKey(date),
+    course,
   };
 };
 
