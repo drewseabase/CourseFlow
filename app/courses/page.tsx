@@ -78,6 +78,9 @@ export default function CoursesPage() {
     const fourteenDaysFromNow = new Date(today);
     fourteenDaysFromNow.setDate(today.getDate() + 14);
     
+    // Counter for unique IDs
+    let assignmentCounter = 0;
+    
     tasksMap.forEach((tasks: Task[]) => {
       tasks.forEach((task) => {
         // Parse task date
@@ -89,8 +92,12 @@ export default function CoursesPage() {
           // Determine assignment type from task title
           const type = inferAssignmentType(task.title);
           
+          // Create unique ID by combining date, course, and counter
+          const uniqueId = `${task.dateKey}-${task.course}-${assignmentCounter++}`;
+          
           assignments.push({
             ...task,
+            id: uniqueId, 
             type,
             typeIcon: getTypeIcon(type),
           });
@@ -199,22 +206,49 @@ export default function CoursesPage() {
     // TODO: Implement persistence later
   }
 
-    return (
-        <main className='max-w-300 mx-auto px-6 p-y ml-35'>
+  return (
+    <main className='max-w-375 mx-auto px-6 py-6 ml-40'>
+      {/* Page Header */}
+      <div className="mb-8">
+        <h1 className="text-[36px] font-bold text-[#18181B] mb-2">Courses</h1>
+        <p className="text-[16px] text-[#52525B]">{getSemesterName(today)}</p>
+      </div>
 
-            <div className='grid grid-cols-3 gap-4 mb-8'>
-                {allCourses.map((course) =>(
-                    <CourseCard key={course.id} course={course} onViewSyllabus={handleViewSyllabus} onViewAssignment={handleFilterByCourse}/>
-                ))}
-            </div>
+      {/* Course Grid */}
+      <div className='grid grid-cols-3 gap-6 mb-8'>
+        {allCourses.map((course) => (
+          <CourseCard 
+            key={course.id} 
+            course={course} 
+            onViewSyllabus={handleViewSyllabus} 
+            onViewAssignment={handleFilterByCourse}
+          />
+        ))}
+      </div>
 
-            <div ref={assignmentsRef}>
-                <UpcomingAssignments assignments={getFilteredAssignments()} filteredCourse={filteredCourse} onClearFilter = {handleClearFilter} onAssignmentClick={handleAssignmentClick}/>
-            </div>
+      {/* Upcoming Assignments */}
+      <div ref={assignmentsRef}>
+        <UpcomingAssignments 
+          assignments={getFilteredAssignments()} 
+          filteredCourse={filteredCourse} 
+          onClearFilter={handleClearFilter} 
+          onAssignmentClick={handleAssignmentClick}
+        />
+      </div>
 
-            <SyllabusModal isOpen={syllabusModalOpen} onClose={() => setSyllabusModalOpen(false)} courseName={syllabusModalCourse}/>
+      {/* Modals */}
+      <SyllabusModal 
+        isOpen={syllabusModalOpen} 
+        onClose={() => setSyllabusModalOpen(false)} 
+        courseName={syllabusModalCourse}
+      />
 
-            <AssignmentDetailModal isOpen={assignmentModalOpen} onClose={() => setAssignmentModalOpen(false)} assignment={selectedAssignment} onMarkComplete={handleMarkComplete}/>
-        </main>
-    );
+      <AssignmentDetailModal 
+        isOpen={assignmentModalOpen} 
+        onClose={() => setAssignmentModalOpen(false)} 
+        assignment={selectedAssignment} 
+        onMarkComplete={handleMarkComplete}
+      />
+    </main>
+  );
 }

@@ -14,7 +14,9 @@
 import { Task } from '@/lib/mock/mocktaskgenerator';
 import { getCourseGradient } from '@/lib/mock/coursedata';
 
-export interface Assignment extends Task {
+// Assignment interface - extends Task but overrides id to be string
+export interface Assignment extends Omit<Task, 'id'> {
+  id: string;  // Changed from number to string for unique keys
   type: string;  // Assignment type (Problem Set, Lab Report, etc.)
   typeIcon: string;  // Icon for assignment type
 }
@@ -72,7 +74,7 @@ export default function UpcomingAssignments({
           {filteredCourse && (
             <div className="flex items-center gap-2 mt-2">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#8B5CF6] bg-opacity-10 rounded-lg">
-                <span className="text-[15px] font-semibold text-white tracking-wide">
+                <span className="text-[13px] font-semibold text-white tracking-wide">
                   Filtered by: {filteredCourse}
                 </span>
                 <button
@@ -92,7 +94,7 @@ export default function UpcomingAssignments({
       <div className="flex flex-col gap-3">
         {assignments.length > 0 ? (
           assignments.map((assignment) => {
-            const gradient = getCourseGradient(assignment.course|| '');
+            const gradient = getCourseGradient(assignment.course || '');
             const typeIcon = getTypeIcon(assignment.type);
             
             return (
