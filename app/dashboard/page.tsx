@@ -74,17 +74,17 @@ export default function Dashboard() {
   return (
     <>
       {/*Main Content*/}
-      <div className="max-w-375 mx-auto px-10 py-10 ml-20">
+      <div className="max-w-375 mx-auto px-10 ml-15">
         <main>
           {/* Top Row: Stats Dashboard - 3 cards */}
-          <div className="grid grid-cols-3 gap-5 mb-8 ml-12">
+          <div className="grid grid-cols-3 gap-4.5 mb-8 ml-12">
             <WeekOverview />
             <TasksThisWeek />
             <StudyHours />
           </div>
 
           {/* Bottom Row: Today's Focus (left) and Calendar (right) */}
-          <div className="grid grid-cols-3 gap-12">
+          <div className="grid grid-cols-3 gap-1">
             {/* Today's Focus - Takes 1 column, grows vertically with tasks */}
             <div className="col-span-1 w-80 ml-12">
               <TodaysFocus 

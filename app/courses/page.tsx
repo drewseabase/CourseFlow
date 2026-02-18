@@ -207,7 +207,7 @@ export default function CoursesPage() {
   }
 
   return (
-    <main className='max-w-375 mx-auto px-6 py-6 ml-40'>
+    <main className='max-w-375 mx-auto px-6 ml-20'>
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-[36px] font-bold text-[#18181B] mb-2">Courses</h1>

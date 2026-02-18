@@ -6,7 +6,17 @@ import { useState } from 'react';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('sidebarOpen') === 'true';
+  });
+
+  const toggleMenu = () => {
+    setMobileMenuOpen(prev => {
+      localStorage.setItem('sidebarOpen', String(!prev));
+      return !prev;
+    });
+  };
 
   const navItems = [
     { name: 'Dashboard', href: '/dashboard' },
@@ -31,7 +41,7 @@ export default function Navbar() {
     >
       {/* Toggle NavBar */}
       <button
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        onClick={toggleMenu}
         className={[
           'w-full h-8 rounded-4xl mt-2',
           'flex items-center',
@@ -84,11 +94,11 @@ export default function Navbar() {
         </svg>
       </button>
 
-          <nav className='flex flex-col gap-1'>
+          <nav className='flex flex-col gap-2.5'>
             {/*DashBoard*/}
             <Link href="/dashboard" className={['w-full h-8 rounded-2xl', 'flex items-center', mobileMenuOpen ? 'justify-between px-2.5' : 'justify-center',
-              'transition-all duration-200', 'overflow-hidden', isActive('/dashboard') ? 'bg-zinc-300 text-zinc-900' : 'text-zinc-600 hover:bg-zinc-300 hover:text-zinc-900',
-              ].join(' ')}>
+              'transition-all duration-200', 'overflow-hidden', isActive('/dashboard') ? 'bg-zinc-300 text-zinc-900' : 'text-zinc-900 hover:bg-zinc-300 hover:text-zinc-900',
+              ].join(' ')} aria-label='Dashboard' title='Dashboard'>
 
               {mobileMenuOpen && (
                   <span className="text-sm font-semibold text-zinc-800 whitespace-nowrap pl-1">
@@ -97,7 +107,7 @@ export default function Navbar() {
                 )}
 
                 <svg
-                  className="w-5 h-5 shrink-0 mr-0"
+                  className="w-5.5 h-5.5 shrink-0 mr-0"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
@@ -109,6 +119,60 @@ export default function Navbar() {
                 <rect x="14" y="14" width="7" height="7" rx="1" />
               </svg>
             </Link>
+
+            {/*Calendar*/}
+            <Link href='/calendar' className={['w-full h-8 rounded-2xl', 'flex items-center', mobileMenuOpen ? 'justify-between px-2.5' : 'justify-center',
+              'transition-all duration-200', 'overflow-hidden', isActive('/calendar') ? 'bg-zinc-300 text-zinc-900' : 'text-zinc-900 hover:bg-zinc-300 hover:text-zinc-900',
+              ].join(' ')} aria-label='Calendar' title='Calendar'>
+                {mobileMenuOpen && (
+                  <span className='text-sm font-semibold text-zinc-800 whitespace-nowrap pl-1'>
+                    Calendar
+                  </span>
+                )}
+
+                <svg className='w-6 h-6 shirnk-0 mr-0' fill='none' stroke='currentColor' strokeWidth='2' viewBox = '0 0 24 24'>
+                  <rect x='3' y='4' width='18' height='17' rx='2'></rect>
+                  <line x1 ='8' y1='2' x2='8' y2='6'></line>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </Link>
+
+              {/*Courses*/}
+              <Link href='/courses' className={['w-full h-8 rounded-2xl', 'flex items-center', mobileMenuOpen ? 'justify-between px-2.5' : 'justify-center',
+              'transition-all duration-200', 'overflow-hidden', isActive('/courses') ? 'bg-zinc-300 text-zinc-900' : 'text-zinc-900 hover:bg-zinc-300 hover:text-zinc-900',
+              ].join(' ')} aria-label='Courses' title='Courses'>
+                {mobileMenuOpen && (
+                  <span className='text-sm font-semibold text-zinc-800 whitespace-nowrap pl-1'>
+                    Courses
+                  </span>
+                )}
+
+                <svg className='w-6.5 h-6.5 shirnk-0 mr-0' fill='none' stroke='currentColor' strokeWidth='2' viewBox = '0 0 24 24'>
+                  <path d='M3 10 L12 5 L21 10 L12 15 Z'></path>
+                  <path d= 'M7 13 V16 C7 17.5 10 19 12 19 C14 19 17 17.5 17 16 V13'></path>
+                  <line x1='21' y1='10' x2='21' y2='17'></line>
+                  <circle cx='21' cy='18.5' r='1.8' fill='currentColor' stroke='none'></circle>
+                </svg>
+              </Link>
+
+              {/*Analytics*/}
+              <Link href='/analytics' className={['w-full h-8 rounded-2xl', 'flex items-center', mobileMenuOpen ? 'justify-between px-2.5' : 'justify-center',
+              'transition-all duration-200', 'overflow-hidden', isActive('/analytics') ? 'bg-zinc-300 text-zinc-900' : 'text-zinc-900 hover:bg-zinc-300 hover:text-zinc-900',
+              ].join(' ')} aria-label='Analytics' title='Analytics'>
+                {mobileMenuOpen && (
+                  <span className='text-sm font-semibold text-zinc-800 whitespace-nowrap pl-1'>
+                    Analytics
+                  </span>
+                )}
+
+                <svg className='w-7 h-7 shirnk-0 mr-0' fill='none' stroke='currentColor' strokeWidth='2' viewBox = '0 0 24 24'>
+                  <path d='M4 16 L9 11 L13 13 L20 6'></path>
+                  <circle cx="4" cy="16" r="1.5" fill="currentColor" stroke="none"></circle>
+                  <circle cx="20" cy="6" r="1.5" fill="currentColor" stroke="none"></circle>
+                </svg>
+                
+                </Link>
           </nav>
     </aside>
   );

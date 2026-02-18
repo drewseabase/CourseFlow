@@ -159,7 +159,22 @@ export default function Calendar({ selectedDate, onDateSelect, tasksMap }) {
   const calendarDays = generateCalendarDays();
 
   const panel =
-    'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
+    'bg-zinc-200/85 backdrop-blur-md border-1 border-stone-400/70 rounded-2xl shadow-sm';
+
+  const navBtnHover = {
+    onMouseEnter: (e) => {
+      e.currentTarget.style.transform = 'translate(-2px, -2px)';
+      e.currentTarget.style.boxShadow = '3px 3px 0px 0px #18181B';
+    },
+    onMouseLeave: (e) => {
+      e.currentTarget.style.transform = 'translate(0, 0)';
+      e.currentTarget.style.boxShadow = 'none';
+    },
+    onMouseDown: (e) => {
+      e.currentTarget.style.transform = 'translate(0, 0)';
+      e.currentTarget.style.boxShadow = 'none';
+    },
+  };
 
   return (
     <div className={`p-7 ${panel}`}>
@@ -174,19 +189,25 @@ export default function Calendar({ selectedDate, onDateSelect, tasksMap }) {
           {/* Previous Month Button */}
           <button
             onClick={previousMonth}
-            className="w-10 h-10 border-0 rounded-[10px] bg-[#FAFAFA] cursor-pointer text-lg transition-all duration-200 hover:scale-110 hover:bg-[#E4E4E7]"
+            className="w-10 h-10 rounded-[10px] border-[1.5px] border-violet-400/35 bg-violet-500/10 text-violet-700 cursor-pointer flex items-center justify-center transition-all duration-150"
             aria-label="Previous month"
+            {...navBtnHover}
           >
-            ◀
+            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
           </button>
           
           {/* Next Month Button */}
           <button
             onClick={nextMonth}
-            className="w-10 h-10 border-0 rounded-[10px] bg-[#FAFAFA] cursor-pointer text-lg transition-all duration-200 hover:scale-110 hover:bg-[#E4E4E7]"
+            className="w-10 h-10 rounded-[10px] border-[1.5px] border-violet-400/35 bg-violet-500/10 text-violet-700 cursor-pointer flex items-center justify-center transition-all duration-150"
             aria-label="Next month"
+            {...navBtnHover}
           >
-            ▶
+            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
           </button>
         </div>
       </div>
@@ -197,7 +218,7 @@ export default function Calendar({ selectedDate, onDateSelect, tasksMap }) {
         {dayNames.map((dayName) => (
           <div
             key={dayName}
-            className="text-center text-xs font-bold text-[#A1A1AA] py-3 uppercase"
+            className="text-center text-xs font-bold text-black py-3 uppercase"
           >
             {dayName}
           </div>
@@ -222,24 +243,37 @@ export default function Calendar({ selectedDate, onDateSelect, tasksMap }) {
 
           /**
            * Visual State Priority:
-           * 1. Selected (highest priority) - purple/pink gradient
-           * 2. Today but not selected - subtle border outline
-           * 3. Normal day - light background
+           * 1. Selected (highest priority) - white with dark border
+           * 2. Today but not selected - violet tint
+           * 3. Normal day - soft white
            */
-          
+
           return (
             <div
               key={`day-${dayObj.day}`}
               onClick={() => handleDayClick(dayObj.day)}
-              className={`
-                aspect-square rounded-[14px] flex flex-col items-center justify-center cursor-pointer transition-all duration-200 relative
-                ${isSelectedDate
-                  ? 'bg-linear-to-br from-[#667eea] to-[#764ba2] text-white font-bold' 
+              className={[
+                'aspect-square rounded-[14px] flex flex-col items-center justify-center cursor-pointer transition-all duration-150 relative',
+                isSelectedDate
+                  ? 'bg-white/95 border-2 border-violet-900/35 font-bold text-zinc-900'
                   : isTodayDate
-                    ? 'bg-[#FAFAFA] hover:scale-105 hover:bg-[#E4E4E7] border-2 border-[#667eea]'
-                    : 'bg-[#FAFAFA] hover:scale-105 hover:bg-[#E4E4E7]'
-                }
-              `}
+                  ? 'bg-violet-500/10 border-[1.5px] border-violet-400/35 text-violet-700 font-bold'
+                  : 'bg-white/75 border border-zinc-900/8 text-zinc-900',
+              ].join(' ')}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translate(-1px, -1px)';
+                e.currentTarget.style.boxShadow = isTodayDate
+                  ? '2px 2px 0px 0px #7c3aed'
+                  : '2px 2px 0px 0px #18181B';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translate(0, 0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.transform = 'translate(0, 0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
             >
               {/* Day Number */}
               <div className="text-base font-semibold">
@@ -248,11 +282,11 @@ export default function Calendar({ selectedDate, onDateSelect, tasksMap }) {
 
               {/* Event Indicator Dot */}
               {hasEventIndicator && (
-                <div 
-                  className={`
-                    absolute bottom-1.5 w-1 h-1 rounded-full
-                    ${isSelectedDate ? 'bg-white' : 'bg-[#8B5CF6]'}
-                  `}
+                <div
+                  className={[
+                    'absolute bottom-1.5 w-1 h-1 rounded-full',
+                    isSelectedDate ? 'bg-violet-500' : 'bg-violet-500',
+                  ].join(' ')}
                 />
               )}
             </div>

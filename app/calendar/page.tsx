@@ -144,7 +144,7 @@ export default function CalendarPage() {
     : [];
   
   return (
-    <main className="max-w-675 mx-auto px-1 py-1 ml-40">
+    <main className="max-w-575 mx-auto px-1 ml-25">
       {/*Calendar Container*/}
       <div className="bg-white rounded-[20px] p-7 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
          <CalendarControls
