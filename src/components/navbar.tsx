@@ -20,99 +20,96 @@ export default function Navbar() {
   return (
     <aside
       className={[
-        // Position + size
-        'fixed left-0 top-28 bottom-20 z-40',
-        mobileMenuOpen ? 'w-21 px-2 py-4' : 'w-40 p-4',
-
-        'bg-white/85 backdrop-blur-md',
-        'border border-zinc-200/70',
-        'rounded-r-3xl',
+        'fixed left-0 top-0 bottom-0 z-40',
+        mobileMenuOpen ? 'w-40 px-2 py-4' : 'w-20 p-4',
+        'bg-zinc-200/85 backdrop-blur-md',
+        'border border-stone-400/70',
         'shadow-sm',
-
-        // Layout
         'flex flex-col gap-3',
+        'transition-all duration-200',
       ].join(' ')}
     >
-      {/* Primary action (ONLY gradient button in the sidebar) */}
-      <div className="flex items-center justify-center">
-        <button
-          className={[
-            'w-full rounded-2xl px-4 py-3',
-            'bg-linear-to-r from-[#667eea] to-[#764ba2] text-white',
-            'font-semibold text-sm',
-            'shadow-[0_6px_18px_rgba(102,126,234,0.22)]',
-            'hover:shadow-[0_10px_26px_rgba(102,126,234,0.30)]',
-            'hover:-translate-y-0.5 transition-all duration-200',
-          ].join(' ')}
-        >
-          {mobileMenuOpen ? '+' : '+ Add Task'}
-        </button>
-      </div>
-
-      {/* Nav */}
-      <nav className="flex flex-col gap-1">
-        {navItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={[
-              'rounded-2xl px-3 py-2.5',
-              'text-sm font-semibold',
-              'transition-all duration-200',
-
-              // Collapsed state
-              mobileMenuOpen ? 'px-0 flex justify-center' : '',
-
-              // Active vs default vs hover
-              isActive(item.href)
-                ? 'bg-zinc-100 text-zinc-900'
-                : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900',
-            ].join(' ')}
-          >
-            {mobileMenuOpen ? <span className="text-xl leading-none">•</span> : item.name}
-          </Link>
-        ))}
-      </nav>
-
-      {/* Filters */}
-      <div className="mt-auto flex flex-col gap-2 text-zinc-600">
-        {!mobileMenuOpen && (
-          <small className="text-xs font-medium tracking-wide text-zinc-500 px-1">
-            Filters
-          </small>
-        )}
-
-        <label className={['flex items-center gap-2', mobileMenuOpen ? 'justify-center' : 'px-1'].join(' ')}>
-          <input type="checkbox" defaultChecked className="accent-[#667eea]" />
-          {!mobileMenuOpen && <span className="text-sm">Classes</span>}
-        </label>
-
-        <label className={['flex items-center gap-2', mobileMenuOpen ? 'justify-center' : 'px-1'].join(' ')}>
-          <input type="checkbox" defaultChecked className="accent-[#667eea]" />
-          {!mobileMenuOpen && <span className="text-sm">Work</span>}
-        </label>
-
-        <label className={['flex items-center gap-2', mobileMenuOpen ? 'justify-center' : 'px-1'].join(' ')}>
-          <input type="checkbox" defaultChecked className="accent-[#667eea]" />
-          {!mobileMenuOpen && <span className="text-sm">Personal</span>}
-        </label>
-      </div>
-
-      {/* Collapse toggle (neutral button) */}
+      {/* Toggle NavBar */}
       <button
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         className={[
-          'mt-3 w-full h-11 rounded-2xl',
+          'w-full h-8 rounded-4xl mt-2',
+          'flex items-center',
+          mobileMenuOpen ? 'justify-between px-2.5' : 'justify-center',
           'border border-zinc-200/70',
-          'bg-zinc-100 text-zinc-800',
-          'hover:bg-zinc-200 transition-all duration-200',
-          'font-semibold',
+          'hover:bg-zinc-300 hover:border hover:border-stone-400/70 transition-all duration-200',
+          'overflow-hidden',
         ].join(' ')}
-        aria-label="Toggle sidebar"
-        title="Toggle sidebar"
+        aria-label="Toggle Sidebar"
+        title="Toggle Sidebar"
       >
-        ☰
+        {mobileMenuOpen && (
+          <span className="text-sm font-bold text-zinc-800 tracking-wide whitespace-nowrap pl-1">
+            CourseFlow
+          </span>
+        )}
+
+        <svg
+          className="w-5.5 h-5.5 shrink-0"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          {(() => {
+            const leftStart = 4;
+            const rightEnd = 20;
+
+            const topLength = 16;
+            const midLength = 12;
+            const botLength = 9;
+
+            const topX1 = mobileMenuOpen ? rightEnd - topLength : leftStart;
+            const topX2 = mobileMenuOpen ? rightEnd : leftStart + topLength;
+
+            const midX1 = mobileMenuOpen ? rightEnd - midLength : leftStart;
+            const midX2 = mobileMenuOpen ? rightEnd : leftStart + midLength;
+
+            const botX1 = mobileMenuOpen ? rightEnd - botLength : leftStart;
+            const botX2 = mobileMenuOpen ? rightEnd : leftStart + botLength;
+
+            return (
+              <>
+                <line x1={topX1} y1="6"  x2={topX2} y2="6"  strokeLinecap="round" className="transition-all duration-200" />
+                <line x1={midX1} y1="12" x2={midX2} y2="12" strokeLinecap="round" className="transition-all duration-200" />
+                <line x1={botX1} y1="18" x2={botX2} y2="18" strokeLinecap="round" className="transition-all duration-200" />
+              </>
+            );
+          })()}
+        </svg>
       </button>
+
+          <nav className='flex flex-col gap-1'>
+            {/*DashBoard*/}
+            <Link href="/dashboard" className={['w-full h-8 rounded-2xl', 'flex items-center', mobileMenuOpen ? 'justify-between px-2.5' : 'justify-center',
+              'transition-all duration-200', 'overflow-hidden', isActive('/dashboard') ? 'bg-zinc-300 text-zinc-900' : 'text-zinc-600 hover:bg-zinc-300 hover:text-zinc-900',
+              ].join(' ')}>
+
+              {mobileMenuOpen && (
+                  <span className="text-sm font-semibold text-zinc-800 whitespace-nowrap pl-1">
+                    Dashboard
+                  </span>
+                )}
+
+                <svg
+                  className="w-5 h-5 shrink-0 mr-0"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+              </svg>
+            </Link>
+          </nav>
     </aside>
   );
 }
