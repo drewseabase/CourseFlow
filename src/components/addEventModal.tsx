@@ -9,6 +9,13 @@ interface AddEventModalProps {
 
 type EventType = 'work' | 'personal' | 'appointment' | 'other';
 
+const TYPE_COLORS: Record<EventType, string> = {
+  work: '#3b82f6',
+  personal: '#16a34a',
+  appointment: '#ea580c',
+  other: '#7c3aed',
+};
+
 const EVENT_TYPES: { type: EventType; label: string; color: string; icon: React.ReactNode }[] = [
   {
     type: 'work',
@@ -68,9 +75,25 @@ export default function AddEventModal({ isOpen, onClose }: AddEventModalProps) {
   const [time, setTime] = useState('');
   const [duration, setDuration] = useState('');
 
-  const handleSubmit = () => {
-    // Wire to API later
-    console.log({ selectedType, title, date, time, duration });
+  const handleSubmit = async () => {
+    if(!title || !date || !time || !duration) return;
+    
+    const startTime = new Date(`${date}T${time}`);
+    const endTime = new Date(startTime.getTime() + parseInt(duration) * 60000);
+
+    await fetch('/api/events', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        title,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        type: selectedType,
+        color: TYPE_COLORS[selectedType],
+        duration: parseInt(duration),
+      }),
+    });
+
     handleClose();
   };
 
