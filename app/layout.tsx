@@ -3,7 +3,7 @@ import "./globals.css";
 import ClientLayout from "@/components/clientLayout";
 
 export const metadata: Metadata = {
-  title: "Cadence",
+  title: "CourseFlow",
   description: "Automatically turn deadlines into a realistic schedule",
 };
 

@@ -67,7 +67,7 @@ export default function Navbar({ onAddEvent }: NavbarProps) {
       >
         {mobileMenuOpen && (
           <span className="text-sm font-bold text-zinc-800 tracking-wide whitespace-nowrap pl-1">
-            Cadence
+            CourseFlow
           </span>
         )}
 
