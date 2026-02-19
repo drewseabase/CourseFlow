@@ -5,21 +5,18 @@
  * - Date navigation (previous/next arrows)
  * - Current date range display (auto-formatted based on view)
  * - "Today" button to jump to current date
+ * - "Add Event" button to open the global add event modal
  * - View switcher (Day/Week/Month buttons)
- * 
- * Matches the original CourseFlow design with white card, rounded corners, and shadows.
  */
 
 interface CalendarControlsProps {
-  currentDate: Date;                                    // Currently viewing date
-  viewType: 'day' | 'week' | 'month';                  // Current view mode
-  onViewChange: (view: 'day' | 'week' | 'month') => void;  // View switch handler
-  onNavigate: (direction: 'prev' | 'next' | 'today') => void;  // Navigation handler
+  currentDate: Date;
+  viewType: 'day' | 'week' | 'month';
+  onViewChange: (view: 'day' | 'week' | 'month') => void;
+  onNavigate: (direction: 'prev' | 'next' | 'today') => void;
+  onAddEvent: () => void;
 }
 
-/**
- * Format date range for display based on view type
- */
 function formatDateRange(date: Date, viewType: 'day' | 'week' | 'month'): string {
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -27,46 +24,37 @@ function formatDateRange(date: Date, viewType: 'day' | 'week' | 'month'): string
   ];
   const monthNamesShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  
+
   if (viewType === 'day') {
-    // Format: "Tuesday, Feb 7, 2026"
     const dayName = dayNames[date.getDay()];
     const monthName = monthNamesShort[date.getMonth()];
     const day = date.getDate();
     const year = date.getFullYear();
     return `${dayName}, ${monthName} ${day}, ${year}`;
   }
-  
+
   if (viewType === 'week') {
-    // Format: "Feb 5 - Feb 11, 2026" or "Feb 28 - Mar 6, 2026" if spans months
     const weekStart = new Date(date);
-    weekStart.setDate(date.getDate() - date.getDay()); // Move to Sunday
-    
+    weekStart.setDate(date.getDate() - date.getDay());
     const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekStart.getDate() + 6); // Move to Saturday
-    
+    weekEnd.setDate(weekStart.getDate() + 6);
+
     const startMonth = monthNamesShort[weekStart.getMonth()];
     const endMonth = monthNamesShort[weekEnd.getMonth()];
     const startDay = weekStart.getDate();
     const endDay = weekEnd.getDate();
     const year = weekEnd.getFullYear();
-    
-    // If same month
+
     if (weekStart.getMonth() === weekEnd.getMonth()) {
       return `${startMonth} ${startDay} - ${endDay}, ${year}`;
-    } else {
-      // Different months
-      return `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${year}`;
     }
+    return `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${year}`;
   }
-  
+
   if (viewType === 'month') {
-    // Format: "February 2026"
-    const monthName = monthNames[date.getMonth()];
-    const year = date.getFullYear();
-    return `${monthName} ${year}`;
+    return `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
   }
-  
+
   return '';
 }
 
@@ -74,16 +62,16 @@ export default function CalendarControls({
   currentDate,
   viewType,
   onViewChange,
-  onNavigate
+  onNavigate,
+  onAddEvent,
 }: CalendarControlsProps) {
 
-  const panel =
-        'bg-zinc-200/85 backdrop-blur-md border-1 border-stone-400/70 rounded-2xl shadow-sm';
+  const panel = 'bg-zinc-200/85 backdrop-blur-md border-1 border-stone-400/70 rounded-2xl shadow-sm';
 
   const navBtnHover = {
     onMouseEnter: (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.currentTarget.style.transform = 'translate(-1px, -1px)';
-      e.currentTarget.style.boxShadow = '2px 2px 0px 0px #7c3aed';
+      e.currentTarget.style.transform = 'translate(-2px, -2px)';
+      e.currentTarget.style.boxShadow = '3px 3px 0px 0px #18181B';
     },
     onMouseLeave: (e: React.MouseEvent<HTMLButtonElement>) => {
       e.currentTarget.style.transform = 'translate(0, 0)';
@@ -125,12 +113,12 @@ export default function CalendarControls({
             <polyline points="15 18 9 12 15 6"/>
           </svg>
         </button>
-        
+
         {/* Current Date Range Display */}
         <div className="text-[20px] font-bold text-[#18181B] min-w-70 text-center">
           {formatDateRange(currentDate, viewType)}
         </div>
-        
+
         {/* Next Button */}
         <button
           onClick={() => onNavigate('next')}
@@ -151,11 +139,23 @@ export default function CalendarControls({
         >
           Today
         </button>
+
+        {/* Add Event Button */}
+        <button
+          onClick={onAddEvent}
+          className="ml-1 px-3.5 py-2 rounded-lg border-[1.5px] border-violet-400/35 bg-violet-500/10 text-violet-700 font-semibold text-[13px] cursor-pointer transition-all duration-150 flex items-center gap-1.5"
+          {...smallBtnHover}
+        >
+          <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add Event
+        </button>
       </div>
-      
+
       {/* Right side: View Switcher */}
       <div className="flex gap-1 bg-white/75 border border-zinc-900/8 p-1 rounded-xl">
-        {/* Day View Button */}
         <button
           onClick={() => onViewChange('day')}
           className={`
@@ -168,8 +168,7 @@ export default function CalendarControls({
         >
           Day
         </button>
-        
-        {/* Week View Button */}
+
         <button
           onClick={() => onViewChange('week')}
           className={`
@@ -182,8 +181,7 @@ export default function CalendarControls({
         >
           Week
         </button>
-        
-        {/* Month View Button */}
+
         <button
           onClick={() => onViewChange('month')}
           className={`
@@ -193,7 +191,6 @@ export default function CalendarControls({
               : 'bg-transparent border-transparent text-[#71717A] hover:bg-zinc-900/5 hover:text-zinc-900'
             }
           `}
-         
         >
           Month
         </button>

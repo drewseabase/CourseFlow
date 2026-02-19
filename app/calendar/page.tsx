@@ -24,29 +24,32 @@ import WeekView from "@/components/calendar/weekView";
 import DayView from "@/components/calendar/dayView";
 import MonthView from "@/components/calendar/monthView";
 import EventModal from "@/components/calendar/eventModal";
+import { useAddEvent } from "context/addEventContext";
 import { generateCalendarEvents, getEventsForDay, getEventsForWeek, getEventsForMonth, getWeekStart, getMonthStart, CalendarEvent } from "@/lib/mock/calendardatagenerator";
 
 export default function CalendarPage() {
-  // Get today's date for initial state
   const today = new Date();
-  
+
+  // Global add event modal trigger from context
+  const { openAddEvent } = useAddEvent();
+
   /**
    * State: Current view type
    */
   const [viewType, setViewType] = useState<'day' | 'week' | 'month'>('week');
-  
+
   /**
    * State: Currently viewing date
    */
   const [currentDate, setCurrentDate] = useState<Date>(today);
-  
+
   /**
    * State: All generated events (2-3 months worth)
    */
   const [allEvents, setAllEvents] = useState<CalendarEvent[]>([]);
-  
+
   /**
-   * State: Modal for month view
+   * State: Modal for month view day click
    */
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedModalDate, setSelectedModalDate] = useState<Date | null>(null);
@@ -66,27 +69,23 @@ export default function CalendarPage() {
       return !prev;
     });
   };
-  
+
   /**
    * Effect: Generate events on component mount
-   * Creates events for 3 months (before, current, after)
    */
   useEffect(() => {
-    // Start date: 1 month before current date
     const startDate = new Date(today);
     startDate.setMonth(today.getMonth() - 1);
     startDate.setDate(1);
-    
-    // End date: 2 months after current date
+
     const endDate = new Date(today);
     endDate.setMonth(today.getMonth() + 2);
-    endDate.setDate(0); // Last day of month
-    
-    // Generate all events
+    endDate.setDate(0);
+
     const events = generateCalendarEvents(startDate, endDate);
     setAllEvents(events);
-  }, []); // Only run once on mount
-  
+  }, []);
+
   /**
    * Get events for current view
    */
@@ -102,14 +101,14 @@ export default function CalendarPage() {
     }
     return [];
   };
-  
+
   /**
    * Handle view change (Day/Week/Month buttons)
    */
   const handleViewChange = (view: 'day' | 'week' | 'month') => {
     setViewType(view);
   };
-  
+
   /**
    * Handle navigation (Previous/Next/Today buttons)
    */
@@ -118,47 +117,39 @@ export default function CalendarPage() {
       setCurrentDate(new Date());
       return;
     }
-    
+
     const newDate = new Date(currentDate);
-    
+
     if (viewType === 'day') {
-      // Move by 1 day
       newDate.setDate(currentDate.getDate() + (direction === 'next' ? 1 : -1));
     } else if (viewType === 'week') {
-      // Move by 7 days (to next/prev Sunday)
       newDate.setDate(currentDate.getDate() + (direction === 'next' ? 7 : -7));
     } else if (viewType === 'month') {
-      // Move by 1 month
       newDate.setMonth(currentDate.getMonth() + (direction === 'next' ? 1 : -1));
     }
-    
+
     setCurrentDate(newDate);
   };
-  
+
   /**
-   * Handle day click in month view (opens modal)
+   * Handle day click in month view (opens event detail modal)
    */
   const handleDayClick = (date: Date) => {
     setSelectedModalDate(date);
     setModalOpen(true);
   };
-  
-  /**
-   * Close modal
-   */
+
   const handleCloseModal = () => {
     setModalOpen(false);
     setSelectedModalDate(null);
   };
-  
-  // Get events for current view
+
   const viewEvents = getCurrentViewEvents();
-  
-  // Get events for modal (if open)
-  const modalEvents = selectedModalDate 
+
+  const modalEvents = selectedModalDate
     ? getEventsForDay(selectedModalDate, allEvents)
     : [];
-  
+
   return (
     <main className="max-w-575 mx-auto px-1 ml-25">
       {/* Calendar Container */}
@@ -168,6 +159,7 @@ export default function CalendarPage() {
           viewType={viewType}
           onViewChange={handleViewChange}
           onNavigate={handleNavigate}
+          onAddEvent={openAddEvent}
         />
 
         {/* Legend + Active View side by side */}
@@ -199,7 +191,7 @@ export default function CalendarPage() {
         </div>
       </div>
 
-      {/* Event Modal */}
+      {/* Event Detail Modal (month view day click) */}
       <EventModal
         date={selectedModalDate}
         events={modalEvents}

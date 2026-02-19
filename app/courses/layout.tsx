@@ -1,5 +1,3 @@
-import Navbar from "@/components/navbar";
-
 export default function CoursesLayout({
     children,
 }:{
@@ -9,7 +7,6 @@ export default function CoursesLayout({
         <>
         {/*Main Content*/}
         <div className="max-w-375 mx-auto px-10 py-10 mt-4">
-            <Navbar/>
             <main className="mt-8">{children}</main>
         </div>
         </>
