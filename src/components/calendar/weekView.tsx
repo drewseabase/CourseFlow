@@ -66,7 +66,7 @@ function getEventsForSlot(
       eventYear === day.getFullYear() &&
       eventHour === hour
     );
-  });
+  }).slice(0,2);
 }
 
 /**
@@ -99,6 +99,34 @@ function calculateEventStyle(
   };
 }
 
+/**
+ * Derive a muted background, border, and text color from an event's color.
+ * Handles both hex colors and Tailwind gradient class strings.
+ */
+function getMutedEventStyle(color: string): React.CSSProperties {
+  // If it's a Tailwind gradient class string we can't use it inline —
+  // fall back to a neutral violet tint
+  if (color.startsWith('from-')) {
+    return {
+      backgroundColor: 'rgba(139,92,246,0.10)',
+      border: '1.5px solid rgba(139,92,246,0.28)',
+      color: '#6d28d9',
+    };
+  }
+
+  // Parse hex → RGB so we can build rgba values
+  const hex = color.replace('#', '');
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  return {
+    backgroundColor: `rgba(${r},${g},${b},0.10)`,
+    border: `1.5px solid rgba(${r},${g},${b},0.28)`,
+    color: color,
+  };
+}
+
 export default function WeekView({ weekStart, events }: WeekViewProps) {
   // Generate array of 7 days starting from Sunday
   const days = Array.from({ length: 7 }, (_, i) => {
@@ -116,14 +144,13 @@ export default function WeekView({ weekStart, events }: WeekViewProps) {
 
   useEffect(() => {
     if (!scrollRef.current) return;
-
     const currentHour = new Date().getHours();
     scrollRef.current.scrollTop = currentHour * CELL_HEIGHT;
   }, []);
 
   // Option A surface token
   const panel =
-    'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
+    'bg-zinc-200/85 backdrop-blur-md border-1 border-stone-400/70 rounded-2xl shadow-sm';
   
   return (
     <div className={`p-7 ${panel}`}>
@@ -186,14 +213,42 @@ export default function WeekView({ weekStart, events }: WeekViewProps) {
                     style={{ minHeight: `${CELL_HEIGHT}px`, height: `${CELL_HEIGHT}px` }}
                   >
                     {/* Render events in this slot */}
-                    {slotEvents.map((event) => (
-                      <CalendarEventCard
-                        key={event.id}
-                        event={event}
-                        viewType="week"
-                        style={calculateEventStyle(event, slotEvents, CELL_HEIGHT)}
-                      />
-                    ))}
+                    {slotEvents.map((event) => {
+                      const eventStyle = calculateEventStyle(event, slotEvents, CELL_HEIGHT);
+                      const mutedStyle = getMutedEventStyle(event.color);
+
+                      return (
+                        <div
+                          key={event.id}
+                          style={{
+                            ...eventStyle,
+                            ...mutedStyle,
+                            borderRadius: '6px',
+                            padding: '3px 6px',
+                            fontSize: '10px',
+                            fontWeight: 700,
+                            overflow: 'hidden',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '5px',
+                          }}
+                        >
+                          {/* Small color dot */}
+                          <span
+                            style={{
+                              width: '6px',
+                              height: '6px',
+                              borderRadius: '2px',
+                              backgroundColor: event.color.startsWith('from-') ? '#8B5CF6' : event.color,
+                              flexShrink: 0,
+                            }}
+                          />
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {event.title}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
               })}

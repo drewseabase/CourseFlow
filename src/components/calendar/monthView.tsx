@@ -137,7 +137,7 @@ export default function MonthView({ monthStart, events, selectedDate, onDayClick
   const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   const panel =
-    'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
+    'bg-zinc-200/85 backdrop-blur-md border-1 border-stone-400/70 rounded-2xl shadow-sm';
   
   return (
     <div className={`p-7 ${panel}`}>
@@ -147,7 +147,7 @@ export default function MonthView({ monthStart, events, selectedDate, onDayClick
         {dayNames.map((dayName) => (
           <div
             key={dayName}
-            className="text-center text-xs font-bold text-[#A1A1AA] py-3 uppercase"
+            className="text-center text-xs font-bold text-black py-3 uppercase"
           >
             {dayName}
           </div>

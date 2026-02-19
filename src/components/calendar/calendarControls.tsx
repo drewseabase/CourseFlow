@@ -77,21 +77,53 @@ export default function CalendarControls({
   onNavigate
 }: CalendarControlsProps) {
 
-  // Option A surface token
   const panel =
-    'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
+        'bg-zinc-200/85 backdrop-blur-md border-1 border-stone-400/70 rounded-2xl shadow-sm';
+
+  const navBtnHover = {
+    onMouseEnter: (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.currentTarget.style.transform = 'translate(-1px, -1px)';
+      e.currentTarget.style.boxShadow = '2px 2px 0px 0px #7c3aed';
+    },
+    onMouseLeave: (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.currentTarget.style.transform = 'translate(0, 0)';
+      e.currentTarget.style.boxShadow = 'none';
+    },
+    onMouseDown: (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.currentTarget.style.transform = 'translate(0, 0)';
+      e.currentTarget.style.boxShadow = 'none';
+    },
+  };
+
+  const smallBtnHover = {
+    onMouseEnter: (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.currentTarget.style.transform = 'translate(-1px, -1px)';
+      e.currentTarget.style.boxShadow = '2px 2px 0px 0px #7c3aed';
+    },
+    onMouseLeave: (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.currentTarget.style.transform = 'translate(0, 0)';
+      e.currentTarget.style.boxShadow = 'none';
+    },
+    onMouseDown: (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.currentTarget.style.transform = 'translate(0, 0)';
+      e.currentTarget.style.boxShadow = 'none';
+    },
+  };
 
   return (
     <div className={`flex justify-between items-center mb-6 p-1.5 ${panel}`}>
       {/* Left side: Date Navigation */}
-      <div className="flex gap-0 items-center">
+      <div className="flex gap-1 items-center ml-1">
         {/* Previous Button */}
         <button
           onClick={() => onNavigate('prev')}
-          className="w-10 h-10 ml-4 border-0 rounded-[10px] bg-[#FAFAFA] cursor-pointer text-lg transition-all duration-200 hover:scale-110 hover:bg-[#E4E4E7]"
+          className="w-10 h-10 rounded-[10px] border-[1.5px] border-violet-400/35 bg-violet-500/10 text-violet-700 cursor-pointer flex items-center justify-center transition-all duration-150"
           aria-label="Previous"
+          {...navBtnHover}
         >
-          ◀
+          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
         </button>
         
         {/* Current Date Range Display */}
@@ -102,31 +134,35 @@ export default function CalendarControls({
         {/* Next Button */}
         <button
           onClick={() => onNavigate('next')}
-          className="w-10 h-10 border-0 mr-8 rounded-[10px] bg-[#FAFAFA] cursor-pointer text-lg transition-all duration-200 hover:scale-110 hover:bg-[#E4E4E7]"
+          className="w-10 h-10 rounded-[10px] border-[1.5px] border-violet-400/35 bg-violet-500/10 text-violet-700 cursor-pointer flex items-center justify-center transition-all duration-150"
           aria-label="Next"
+          {...navBtnHover}
         >
-          ▶
+          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
         </button>
-        
+
         {/* Today Button */}
         <button
           onClick={() => onNavigate('today')}
-          className="px-5 py-2.5 border-2 border-[#8B5CF6] rounded-[10px] bg-transparent text-[#8B5CF6] font-semibold text-sm cursor-pointer transition-all duration-200 hover:bg-[#8B5CF6] hover:text-white"
+          className="ml-2 px-3.5 py-2 rounded-lg border-[1.5px] border-violet-400/35 bg-violet-500/10 text-violet-700 font-semibold text-[13px] cursor-pointer transition-all duration-150"
+          {...smallBtnHover}
         >
           Today
         </button>
       </div>
       
       {/* Right side: View Switcher */}
-      <div className="flex gap-2 bg-[#FAFAFA] p-1.5 rounded-xl">
+      <div className="flex gap-1 bg-white/75 border border-zinc-900/8 p-1 rounded-xl">
         {/* Day View Button */}
         <button
           onClick={() => onViewChange('day')}
           className={`
-            px-4 py-2 border-0 font-semibold text-[13px] cursor-pointer rounded-lg transition-all duration-200
-            ${viewType === 'day' 
-              ? 'bg-[#667eea] shadow-[0_2px_8px_rgba(0,0,0,0.08)] text-white' 
-              : 'bg-transparent text-[#52525B] hover:bg-linear-to-r hover:from-[#667eea] hover:to-[#764ba2] hover:text-white hover:shadow-[0_4px_12px_rgba(102,126,234,0.35)]'
+            px-3.5 py-1.5 border-[1.5px] font-semibold text-[13px] cursor-pointer rounded-lg transition-all duration-150
+            ${viewType === 'day'
+              ? 'bg-violet-500/15 border-violet-400/35 text-violet-700'
+              : 'bg-transparent border-transparent text-[#71717A] hover:bg-zinc-900/5 hover:text-zinc-900'
             }
           `}
         >
@@ -137,10 +173,10 @@ export default function CalendarControls({
         <button
           onClick={() => onViewChange('week')}
           className={`
-            px-4 py-2 border-0 font-semibold text-[13px] cursor-pointer rounded-lg transition-all duration-200
-            ${viewType === 'week' 
-              ? 'bg-[#667eea] shadow-[0_2px_8px_rgba(0,0,0,0.08)] text-white' 
-              : 'bg-transparent text-[#52525B] hover:bg-linear-to-r hover:from-[#667eea] hover:to-[#764ba2] hover:text-white hover:shadow-[0_4px_12px_rgba(102,126,234,0.35)]'
+            px-3.5 py-1.5 border-[1.5px] font-semibold text-[13px] cursor-pointer rounded-lg transition-all duration-150
+            ${viewType === 'week'
+              ? 'bg-violet-500/15 border-violet-400/35 text-violet-700'
+              : 'bg-transparent border-transparent text-[#71717A] hover:bg-zinc-900/5 hover:text-zinc-900'
             }
           `}
         >
@@ -151,12 +187,13 @@ export default function CalendarControls({
         <button
           onClick={() => onViewChange('month')}
           className={`
-            px-4 py-2 border-0 font-semibold text-[13px] cursor-pointer rounded-lg transition-all duration-200
-            ${viewType === 'month' 
-              ? 'bg-[#667eea] shadow-[0_2px_8px_rgba(0,0,0,0.08)] text-white' 
-              : 'bg-transparent text-[#52525B] hover:bg-linear-to-r hover:from-[#667eea] hover:to-[#764ba2] hover:text-white hover:shadow-[0_4px_12px_rgba(102,126,234,0.35)]'
+            px-3.5 py-1.5 border-[1.5px] font-semibold text-[13px] cursor-pointer rounded-lg transition-all duration-150
+            ${viewType === 'month'
+              ? 'bg-violet-500/15 border-violet-400/35 text-violet-700'
+              : 'bg-transparent border-transparent text-[#71717A] hover:bg-zinc-900/5 hover:text-zinc-900'
             }
           `}
+         
         >
           Month
         </button>

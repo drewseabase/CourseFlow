@@ -16,12 +16,11 @@ interface CourseCardProps {
 }
 
 export default function CourseCard({course, onViewSyllabus, onViewAssignment}: CourseCardProps){
-    const panel = 'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
+    const panel =
+        'bg-zinc-200/85 backdrop-blur-md border-1 border-stone-400/70 rounded-2xl shadow-sm';
 
     return(
         <div className={`${panel} p-6 relative overflow-hidden transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-lg`}>
-            {/*Top Gradient Border*/}
-            <div className={`absolute top-0 left-0 right-0 h-1.5 bg-linear-to-r ${course.gradientClass}`}></div>
 
             {/*Course Code*/}
             <div className="text-[11px] font-bold uppercase tracking-wide text-[#A1A1AA] mb-2">

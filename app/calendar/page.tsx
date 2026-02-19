@@ -9,11 +9,11 @@
  * - Current Date
  * - Event data generation and filtering
  * - Modal state for month view
+ * - Legend open/closed state (lifted up so CalendarLegend and views share it)
  * 
  * Layout:
  * - CalendarControls
- * - CalendarLegend
- * - Active view Component
+ * - CalendarLegend (collapsible sidebar) + Active view side by side
  * - EventModal
  */
 'use client'
@@ -50,6 +50,22 @@ export default function CalendarPage() {
    */
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedModalDate, setSelectedModalDate] = useState<Date | null>(null);
+
+  /**
+   * State: Legend open/closed — lifted here so both CalendarLegend
+   * and the view components can share it
+   */
+  const [legendOpen, setLegendOpen] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('legendOpen') === 'true';
+  });
+
+  const toggleLegend = () => {
+    setLegendOpen(prev => {
+      localStorage.setItem('legendOpen', String(!prev));
+      return !prev;
+    });
+  };
   
   /**
    * Effect: Generate events on component mount
@@ -145,33 +161,51 @@ export default function CalendarPage() {
   
   return (
     <main className="max-w-575 mx-auto px-1 ml-25">
-      {/*Calendar Container*/}
+      {/* Calendar Container */}
       <div className="bg-white rounded-[20px] p-7 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
-         <CalendarControls
-        currentDate={currentDate}
-        viewType={viewType}
-        onViewChange={handleViewChange}
-        onNavigate={handleNavigate}
-      />
-        <CalendarLegend events={viewEvents} viewType = {viewType}/>
+        <CalendarControls
+          currentDate={currentDate}
+          viewType={viewType}
+          onViewChange={handleViewChange}
+          onNavigate={handleNavigate}
+        />
 
-        {/*Active View*/}
-        {viewType === 'week' && (
-            <WeekView weekStart = {getWeekStart(currentDate)} events = {viewEvents}/>
-        )}
+        {/* Legend + Active View side by side */}
+        <div className="flex gap-3">
+          <CalendarLegend
+            events={viewEvents}
+            viewType={viewType}
+            isOpen={legendOpen}
+            onToggle={toggleLegend}
+          />
 
-        {viewType === 'day' && (
-            <DayView date = {currentDate} events = {viewEvents}/>
-        )}
-
-        {viewType === 'month' && (
-            <MonthView monthStart={getMonthStart(currentDate)} events={viewEvents} selectedDate={selectedModalDate} onDayClick={handleDayClick}/>
-        )}
+          {/* Active View */}
+          <div className="flex-1 min-w-0">
+            {viewType === 'week' && (
+              <WeekView weekStart={getWeekStart(currentDate)} events={viewEvents} />
+            )}
+            {viewType === 'day' && (
+              <DayView date={currentDate} events={viewEvents} />
+            )}
+            {viewType === 'month' && (
+              <MonthView
+                monthStart={getMonthStart(currentDate)}
+                events={viewEvents}
+                selectedDate={selectedModalDate}
+                onDayClick={handleDayClick}
+              />
+            )}
+          </div>
+        </div>
       </div>
 
-        {/*Event Modal*/}
-        <EventModal date = {selectedModalDate} events = {modalEvents} isOpen={modalOpen} onClose={handleCloseModal}/>
-
+      {/* Event Modal */}
+      <EventModal
+        date={selectedModalDate}
+        events={modalEvents}
+        isOpen={modalOpen}
+        onClose={handleCloseModal}
+      />
     </main>
-);
+  );
 }

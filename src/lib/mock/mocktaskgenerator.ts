@@ -142,13 +142,12 @@ export const generateWeeklyTasks = (weekStart: Date): Map<string, Task[]> => {
  */
 const getTaskCountForDay = (dayOffset: number, random: () => number): number => {
   // Some days have more tasks than others (based on typical student schedule)
-  const distribution = [2, 3, 2, 3, 2, 1, 1]; // Mon-Sun
+  const distribution = [0,0,0,0,0,0,0]; // Mon-Sun
   const baseCount = distribution[dayOffset];
   
   // Add some randomness (0 or 1 additional task)
-  const extraTask = random() > 0.6 ? 1 : 0;
   
-  return baseCount + extraTask;
+  return baseCount;
 };
 
 /**
