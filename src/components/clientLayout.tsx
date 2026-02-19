@@ -14,9 +14,10 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
 
   const openAddEvent = () => { console.log('openAddEvent called'); setModalOpen(true)};
   const closeAddEvent = () => setModalOpen(false);
+  const [onEventAdded, setOnEventAdded] = useState<(() => void) | undefined>(undefined);
 
   return (
-    <AddEventContext.Provider value={{ openAddEvent }}>
+    <AddEventContext.Provider value={{ openAddEvent, onEventAdded, setOnEventAdded }}>
       <div className="min-h-screen flex">
         <Navbar onAddEvent={openAddEvent} />
         <main className="flex-1">
