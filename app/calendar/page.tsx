@@ -32,9 +32,9 @@ export default function CalendarPage() {
   const today = new Date();
 
   const { openAddEvent, setOnEventAdded } = useAddEvent();
-  const { events: rawEvents, loading, refresh } = useEvents();
+  const { events: rawEvents, refresh } = useEvents();
 
-  // Register refresh once on mount — empty dep array prevents the infinite loop
+  // Register refresh once on mount
   useEffect(() => {
     setOnEventAdded(refresh);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -113,39 +113,32 @@ export default function CalendarPage() {
           onAddEvent={openAddEvent}
         />
 
-        {loading && (
-          <div className="flex items-center justify-center py-20 text-zinc-400 text-sm font-medium">
-            Loading events...
-          </div>
-        )}
+        {/* Calendar always renders — events pop in when fetch completes */}
+        <div className="flex gap-3">
+          <CalendarLegend
+            events={viewEvents}
+            viewType={viewType}
+            isOpen={legendOpen}
+            onToggle={toggleLegend}
+          />
 
-        {!loading && (
-          <div className="flex gap-3">
-            <CalendarLegend
-              events={viewEvents}
-              viewType={viewType}
-              isOpen={legendOpen}
-              onToggle={toggleLegend}
-            />
-
-            <div className="flex-1 min-w-0">
-              {viewType === 'week' && (
-                <WeekView weekStart={getWeekStart(currentDate)} events={viewEvents} />
-              )}
-              {viewType === 'day' && (
-                <DayView date={currentDate} events={viewEvents} />
-              )}
-              {viewType === 'month' && (
-                <MonthView
-                  monthStart={getMonthStart(currentDate)}
-                  events={viewEvents}
-                  selectedDate={selectedModalDate}
-                  onDayClick={handleDayClick}
-                />
-              )}
-            </div>
+          <div className="flex-1 min-w-0">
+            {viewType === 'week' && (
+              <WeekView weekStart={getWeekStart(currentDate)} events={viewEvents} />
+            )}
+            {viewType === 'day' && (
+              <DayView date={currentDate} events={viewEvents} />
+            )}
+            {viewType === 'month' && (
+              <MonthView
+                monthStart={getMonthStart(currentDate)}
+                events={viewEvents}
+                selectedDate={selectedModalDate}
+                onDayClick={handleDayClick}
+              />
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       <EventModal

@@ -13,7 +13,7 @@ export interface Event {
 
 export function useEvents() {
     const [events, setEvents] = useState<Event[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const fetchEvents = useCallback(async () => {

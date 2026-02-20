@@ -1,5 +1,6 @@
 'use client';
 
+import { useAddEvent } from 'context/addEventContext';
 import { useState } from 'react';
 
 interface AddEventModalProps {
@@ -74,14 +75,17 @@ export default function AddEventModal({ isOpen, onClose }: AddEventModalProps) {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [duration, setDuration] = useState('');
+  const {onEventAdded} = useAddEvent();
 
-  const handleSubmit = async () => {
-    if(!title || !date || !time || !duration) return;
-    
-    const startTime = new Date(`${date}T${time}`);
-    const endTime = new Date(startTime.getTime() + parseInt(duration) * 60000);
+ const handleSubmit = async () => {
+  console.log({ title, date, time, duration });
+  if(!title || !date || !time || !duration) return;
+  
+  const startTime = new Date(`${date}T${time}`);
+  const endTime = new Date(startTime.getTime() + parseInt(duration) * 60000);
 
-    await fetch('/api/events', {
+  try {
+    const res = await fetch('/api/events', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
@@ -93,9 +97,16 @@ export default function AddEventModal({ isOpen, onClose }: AddEventModalProps) {
         duration: parseInt(duration),
       }),
     });
+    console.log('Response status:', res.status);
+    const data = await res.json();
+    console.log('Response data:', data);
+  } catch (err) {
+    console.error('Fetch error:', err);
+  }
 
-    handleClose();
-  };
+  onEventAdded?.();
+  handleClose();
+};
 
   const handleClose = () => {
     setTitle('');

@@ -1,20 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Navbar from '@/components/navbar';
 import AddEventModal from './addEventModal';
 import { AddEventContext } from 'context/addEventContext';
 
-interface ClientLayoutProps {
-  children: React.ReactNode;
-}
-
-export default function ClientLayout({ children }: ClientLayoutProps) {
+export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const onEventAddedRef = useRef<(() => void) | undefined>(undefined);
 
-  const openAddEvent = () => { console.log('openAddEvent called'); setModalOpen(true)};
+  const openAddEvent = () => setModalOpen(true);
   const closeAddEvent = () => setModalOpen(false);
-  const [onEventAdded, setOnEventAdded] = useState<(() => void) | undefined>(undefined);
+
+  const setOnEventAdded = (fn: () => void) => {
+    onEventAddedRef.current = fn;
+  };
+
+  const onEventAdded = () => {
+    onEventAddedRef.current?.();
+  };
 
   return (
     <AddEventContext.Provider value={{ openAddEvent, onEventAdded, setOnEventAdded }}>

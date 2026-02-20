@@ -1,27 +1,28 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "postgresql"
 }
 
+model Event {
+  id        String    @id @default(cuid())
+  title     String
+  startTime DateTime
+  endTime   DateTime
+  type      EventType
+  color     String
+  duration  Int
+  userId    String    @default("temp-user")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
 enum EventType {
-  work 
+  work
   personal
   appointment
   other
-}
-
-model Event {
-  id          String        @id @default(cuid())
-  title        String
-  startTime   DateTime
-  endTime     DateTime
-  type        EventType
-  color       String
-  duration    Int 
-  userId      String        @default("temp-user")
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
 }
