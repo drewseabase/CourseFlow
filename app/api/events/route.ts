@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { auth } from 'auth';
 
 // GET all events
 export async function GET() {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const events = await prisma.event.findMany({
-    where: { userId: 'temp-user' },
+    where: { userId: session.user.id },
     orderBy: { startTime: 'asc' },
   });
   return NextResponse.json(events);
@@ -12,6 +18,11 @@ export async function GET() {
 
 // POST a new event
 export async function POST(req: NextRequest) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const body = await req.json();
   const event = await prisma.event.create({
     data: {
@@ -21,7 +32,7 @@ export async function POST(req: NextRequest) {
       type: body.type,
       color: body.color,
       duration: body.duration,
-      userId: 'temp-user',
+      userId: session.user.id,
     },
   });
   return NextResponse.json(event, { status: 201 });

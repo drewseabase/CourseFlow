@@ -1,11 +1,67 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "postgresql"
 }
+
+// ─── NextAuth Required Models ────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  events        Event[]
+  canvasIntegration CanvasIntegration?
+  courses           Course[]
+  assignments       Assignment[]
+  announcements     Announcement[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── App Models ───────────────────────────────────────────────────────────────
 
 model Event {
   id        String    @id @default(cuid())
@@ -15,7 +71,8 @@ model Event {
   type      EventType
   color     String
   duration  Int
-  userId    String    @default("temp-user")
+  userId    String                        // ← now a real FK
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -25,4 +82,75 @@ enum EventType {
   personal
   appointment
   other
+}
+
+model CanvasIntegration {
+  id                      String      @id @default(cuid())
+  userId                  String      @unique
+  canvasBaseUrl           String      
+  encryptedAccessToken    String
+  tokenIv                 String
+  tokenExpiry             DateTime?
+  lastSyncedAt            DateTime?
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
+
+  user                    User        @relation(fields: [userId], references:[id], onDelete: Cascade)
+}
+
+model Course{
+  id                      String    @id @default(cuid())
+  canvasId                String    
+  userId                  String
+  name                    String
+  code                    String
+  term                    String?
+  instructorName          String?
+  enrollmentType          String?
+  gradientClass           String?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignments             Assignment[]
+  announcements           Announcement[]
+
+  @@unique([userId, canvasId])
+}
+
+model Assignment {
+  id               String    @id @default(cuid())
+  canvasId         String
+  courseId         String
+  userId           String
+  title            String
+  description      String?   @db.Text
+  dueAt            DateTime?                     // nullable — Canvas allows no due date
+  pointsPossible   Float?
+  submissionTypes  String[]                      // Canvas returns an array e.g. ["online_upload"]
+  assignmentType   String
+  isCompleted      Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  course           Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, canvasId])
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  canvasId  String
+  courseId  String
+  userId    String
+  title     String
+  message   String   @db.Text
+  postedAt  DateTime
+  createdAt DateTime @default(now())
+
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, canvasId])
 }
