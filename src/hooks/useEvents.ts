@@ -18,7 +18,12 @@ export function useEvents() {
 
     const fetchEvents = useCallback(async () => {
         try {
+            setLoading(true);
             const res = await fetch('/api/events');
+            if (!res.ok) {
+                setError(`Failed to fetch events: ${res.status}`);
+                return;
+            }
             const data = await res.json();
             setEvents(data);
         } catch (err) {
@@ -26,11 +31,11 @@ export function useEvents() {
         } finally {
             setLoading(false);
         }
-    }, []); // stable reference — never recreated
+    }, []);
 
     useEffect(() => {
         fetchEvents();
     }, [fetchEvents]);
-
+    
     return { events, loading, error, refresh: fetchEvents };
 }
