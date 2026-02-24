@@ -12,13 +12,12 @@
  */
 
 import { Task } from '@/lib/mock/mocktaskgenerator';
-import { getCourseGradient } from '@/lib/mock/coursedata';
+import AssignmentTypeIcon from '../icons/assignmentTypeIcons';
 
 // Assignment interface - extends Task but overrides id to be string
 export interface Assignment extends Omit<Task, 'id'> {
   id: string;  // Changed from number to string for unique keys
   type: string;  // Assignment type (Problem Set, Lab Report, etc.)
-  typeIcon: string;  // Icon for assignment type
 }
 
 interface UpcomingAssignmentsProps {
@@ -26,21 +25,6 @@ interface UpcomingAssignmentsProps {
   filteredCourse: string | null;
   onClearFilter: () => void;
   onAssignmentClick: (assignment: Assignment) => void;
-}
-
-/**
- * Get icon for assignment type
- */
-function getTypeIcon(type: string): string {
-  const iconMap: Record<string, string> = {
-    'Problem Set': '📝',
-    'Lab Report': '🔬',
-    'Programming Assignment': '💻',
-    'Essay': '✍️',
-    'Reading': '📖',
-    'Quiz Prep': '📚',
-  };
-  return iconMap[type] || '📄';
 }
 
 /**
@@ -60,6 +44,13 @@ export default function UpcomingAssignments({
 }: UpcomingAssignmentsProps) {
   // Consistent panel styling
   const panel = 'bg-white/90 backdrop-blur-md border border-zinc-200/70 rounded-3xl shadow-sm';
+
+  const EmptyBookIcon = () => (
+    <svg className="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15z" strokeLinejoin="round" />
+    </svg>
+  );
   
   return (
     <div className={`${panel} p-7`}>
@@ -94,9 +85,6 @@ export default function UpcomingAssignments({
       <div className="flex flex-col gap-3">
         {assignments.length > 0 ? (
           assignments.map((assignment) => {
-            const gradient = getCourseGradient(assignment.course || '');
-            const typeIcon = getTypeIcon(assignment.type);
-            
             return (
               <div
                 key={assignment.id}
@@ -104,7 +92,7 @@ export default function UpcomingAssignments({
                 className="flex gap-4 p-4 rounded-xl bg-[#FAFAFA] cursor-pointer transition-all duration-200 hover:bg-[#E4E4E7] hover:translate-x-1"
               >
                 {/* Color Bar */}
-                <div className={`w-1 rounded-full bg-linear-to-b ${gradient}`}></div>
+                <div className={`w-1 rounded-full bg-linear-to-b ${assignment.gradientClass}`}></div>
                 
                 {/* Assignment Content */}
                 <div className="flex-1">
@@ -120,8 +108,11 @@ export default function UpcomingAssignments({
                   
                   {/* Meta Information */}
                   <div className="flex gap-4 text-[13px] text-[#52525B]">
-                    <span>⏰ {assignment.duration} estimated</span>
-                    <span>{typeIcon} {assignment.type}</span>
+                    <span>{assignment.duration} estimated</span>
+                    <span className="flex items-center gap-1.5">
+                      <AssignmentTypeIcon type={assignment.type} />
+                      {assignment.type}
+                    </span>
                   </div>
                 </div>
                 
@@ -140,7 +131,7 @@ export default function UpcomingAssignments({
         ) : (
           /* Empty State */
           <div className="text-center py-12">
-            <div className="text-[48px] mb-4">📚</div>
+            <EmptyBookIcon />
             <div className="text-[18px] font-semibold text-[#18181B] mb-2">
               No Upcoming Assignments
             </div>

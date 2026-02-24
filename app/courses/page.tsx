@@ -1,252 +1,134 @@
-/**
- * Courses Page
- * 
- * Main courses page that displays:
- * - Course grid with all enrolled courses
- * - Upcoming assignments section (filterable by course)
- * - Modals for syllabus viewing and assignment details
- * 
- * Manages state for:
- * - Course filtering
- * - Modal visibility
- * - Assignment data
- */
-
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import CourseCard from '@/components/courses/courseCard';
-import UpcomingAssignments, { Assignment } from '@/components/courses/upcomingAssignments';
+import UpcomingAssignments from '@/components/courses/upcomingAssignments';
+import type { Assignment } from '@/lib/canvas/transformer';
 import SyllabusModal from '@/components/courses/syllabusModal';
 import AssignmentDetailModal from '@/components/courses/assignmentDetailModal';
-import { getAllCourses, getSemesterName, CourseMetadata } from '@/lib/mock/coursedata';
-import { generateMultiWeekTasks, getDateKey, Task } from '@/lib/mock/mocktaskgenerator';
-import { ASSIGNMENT_TEMPLATES } from '@/lib/mock/seed-data';
+import { getSemesterName } from '@/lib/mock/coursedata';
+import { useCourses } from '@/hooks/useCourses';
+import { useAssignments } from '@/hooks/useAssignments';
 
 export default function CoursesPage() {
-  // Get current date
   const today = new Date();
-  
-  /**
-   * State: All courses
-   */
-  const [allCourses, setAllCourses] = useState<CourseMetadata[]>([]);
-  
-  /**
-   * State: All assignments (next 14 days)
-   */
-  const [allAssignments, setAllAssignments] = useState<Assignment[]>([]);
-  
-  /**
-   * State: Filtered course (null = show all)
-   */
+
+  const { courses, loading: coursesLoading, isConnected } = useCourses();
+  const { assignments: allAssignments } = useAssignments();
+
   const [filteredCourse, setFilteredCourse] = useState<string | null>(null);
-  
-  /**
-   * State: Syllabus modal
-   */
   const [syllabusModalOpen, setSyllabusModalOpen] = useState(false);
   const [syllabusModalCourse, setSyllabusModalCourse] = useState<string>('');
-  
-  /**
-   * State: Assignment detail modal
-   */
   const [assignmentModalOpen, setAssignmentModalOpen] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null);
-  
-  /**
-   * Ref: Upcoming assignments section for scrolling
-   */
   const assignmentsRef = useRef<HTMLDivElement>(null);
-  
-  /**
-   * Effect: Load courses and assignments on mount
-   */
-  useEffect(() => {
-    // Load all courses
-    const courses = getAllCourses();
-    setAllCourses(courses);
-    
-    // Generate tasks for next 2 weeks
-    const weekStart = new Date(today);
-    weekStart.setDate(today.getDate() - today.getDay()); // Move to Sunday
-    
-    const tasksMap = generateMultiWeekTasks(weekStart, 2);
-    
-    // Convert tasks to assignments and filter to next 14 days
-    const assignments: Assignment[] = [];
-    const fourteenDaysFromNow = new Date(today);
-    fourteenDaysFromNow.setDate(today.getDate() + 14);
-    
-    // Counter for unique IDs
-    let assignmentCounter = 0;
-    
-    tasksMap.forEach((tasks: Task[]) => {
-      tasks.forEach((task) => {
-        // Parse task date
-        const [year, month, day] = task.dateKey.split('-').map(Number);
-        const taskDate = new Date(year, month - 1, day);
-        
-        // Only include if within next 14 days
-        if (taskDate >= today && taskDate <= fourteenDaysFromNow) {
-          // Determine assignment type from task title
-          const type = inferAssignmentType(task.title);
-          
-          // Create unique ID by combining date, course, and counter
-          const uniqueId = `${task.dateKey}-${task.course}-${assignmentCounter++}`;
-          
-          assignments.push({
-            ...task,
-            id: uniqueId, 
-            type,
-            typeIcon: getTypeIcon(type),
-          });
-        }
-      });
-    });
-    
-    // Sort by date
-    assignments.sort((a, b) => {
-      const dateA = new Date(a.dateKey);
-      const dateB = new Date(b.dateKey);
-      return dateA.getTime() - dateB.getTime();
-    });
-    
-    setAllAssignments(assignments);
-  }, []);
-  
-  /**
-   * Infer assignment type from task title
-   * Maps to types in ASSIGNMENT_TEMPLATES
-   */
-  function inferAssignmentType(title: string): string {
-    const lowerTitle = title.toLowerCase();
-    
-    if (lowerTitle.includes('problem set')) return 'Problem Set';
-    if (lowerTitle.includes('lab report')) return 'Lab Report';
-    if (lowerTitle.includes('programming') || lowerTitle.includes('coding')) return 'Programming Assignment';
-    if (lowerTitle.includes('essay')) return 'Essay';
-    if (lowerTitle.includes('reading')) return 'Reading';
-    if (lowerTitle.includes('quiz prep')) return 'Quiz Prep';
-    
-    // Default based on course
-    if (title.includes('CS') || title.includes('Computer Science')) return 'Programming Assignment';
-    if (title.includes('HIST') || title.includes('History')) return 'Essay';
-    if (title.includes('BIO') || title.includes('Physics')) return 'Lab Report';
-    
-    return 'Problem Set';
-  }
-  
-  /**
-   * Get icon for assignment type
-   */
-  function getTypeIcon(type: string): string {
-    const iconMap: Record<string, string> = {
-      'Problem Set': '📝',
-      'Lab Report': '🔬',
-      'Programming Assignment': '💻',
-      'Essay': '✍️',
-      'Reading': '📖',
-      'Quiz Prep': '📚',
-    };
-    return iconMap[type] || '📄';
-  }
-  
-  /**
-   * Get filtered assignments based on selected course
-   */
+
   function getFilteredAssignments(): Assignment[] {
-    if (!filteredCourse) {
-      return allAssignments;
-    }
-    return allAssignments.filter(assignment => assignment.course === filteredCourse);
+    if (!filteredCourse) return allAssignments;
+    return allAssignments.filter(a => a.course === filteredCourse);
   }
-  
-  /**
-   * Handle view syllabus click
-   */
+
   function handleViewSyllabus(courseName: string) {
     setSyllabusModalCourse(courseName);
     setSyllabusModalOpen(true);
   }
-  
-  /**
-   * Handle filter by course click
-   * Also scrolls to assignments section
-   */
+
   function handleFilterByCourse(courseName: string) {
     setFilteredCourse(courseName);
-    
-    // Scroll to assignments section
     setTimeout(() => {
       assignmentsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
   }
-  
-  /**
-   * Handle clear filter
-   */
-  function handleClearFilter() {
-    setFilteredCourse(null);
-  }
-  
-  /**
-   * Handle assignment click
-   */
+
   function handleAssignmentClick(assignment: Assignment) {
     setSelectedAssignment(assignment);
     setAssignmentModalOpen(true);
   }
-  
-  /**
-   * Handle mark complete (no persistence for now)
-   */
+
   function handleMarkComplete(assignmentId: string) {
     console.log('Marked complete:', assignmentId);
-    // TODO: Implement persistence later
+  }
+
+  if (coursesLoading) {
+    return (
+      <main className='max-w-375 mx-auto px-6 ml-20'>
+        <div className="mb-8">
+          <h1 className="text-[36px] font-bold text-[#18181B] mb-2">Courses</h1>
+          <p className="text-[16px] text-[#52525B]">{getSemesterName(today)}</p>
+        </div>
+        <div className="grid grid-cols-3 gap-6 mb-8">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-48 rounded-2xl bg-zinc-100 animate-pulse" />
+          ))}
+        </div>
+      </main>
+    );
+  }
+
+  if (isConnected === false) {
+    return (
+      <main className='max-w-375 mx-auto px-6 ml-20'>
+        <div className="mb-8">
+          <h1 className="text-[36px] font-bold text-[#18181B] mb-2">Courses</h1>
+          <p className="text-[16px] text-[#52525B]">{getSemesterName(today)}</p>
+        </div>
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <svg className="w-16 h-16 mb-6 text-zinc-300" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15z" strokeLinejoin="round" />
+          </svg>
+          <h2 className="text-[24px] font-bold text-[#18181B] mb-3">Connect Canvas to see your courses</h2>
+          <p className="text-[16px] text-[#52525B] mb-8 max-w-md">
+            Link your Canvas account to automatically sync your courses, assignments, and deadlines.
+          </p>
+          
+            href="/settings"
+            className="px-6 py-3 bg-[#8B5CF6] text-white font-semibold rounded-xl hover:bg-[#764ba2] transition-colors"
+          <a>
+            Connect Canvas
+          </a>
+        </div>
+      </main>
+    );
   }
 
   return (
     <main className='max-w-375 mx-auto px-6 ml-20'>
-      {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-[36px] font-bold text-[#18181B] mb-2">Courses</h1>
         <p className="text-[16px] text-[#52525B]">{getSemesterName(today)}</p>
       </div>
 
-      {/* Course Grid */}
       <div className='grid grid-cols-3 gap-6 mb-8'>
-        {allCourses.map((course) => (
-          <CourseCard 
-            key={course.id} 
-            course={course} 
-            onViewSyllabus={handleViewSyllabus} 
+        {courses.map((course) => (
+          <CourseCard
+            key={course.id}
+            course={course}
+            onViewSyllabus={handleViewSyllabus}
             onViewAssignment={handleFilterByCourse}
           />
         ))}
       </div>
 
-      {/* Upcoming Assignments */}
       <div ref={assignmentsRef}>
-        <UpcomingAssignments 
-          assignments={getFilteredAssignments()} 
-          filteredCourse={filteredCourse} 
-          onClearFilter={handleClearFilter} 
+        <UpcomingAssignments
+          assignments={getFilteredAssignments()}
+          filteredCourse={filteredCourse}
+          onClearFilter={() => setFilteredCourse(null)}
           onAssignmentClick={handleAssignmentClick}
         />
       </div>
 
-      {/* Modals */}
-      <SyllabusModal 
-        isOpen={syllabusModalOpen} 
-        onClose={() => setSyllabusModalOpen(false)} 
+      <SyllabusModal
+        isOpen={syllabusModalOpen}
+        onClose={() => setSyllabusModalOpen(false)}
         courseName={syllabusModalCourse}
       />
 
-      <AssignmentDetailModal 
-        isOpen={assignmentModalOpen} 
-        onClose={() => setAssignmentModalOpen(false)} 
-        assignment={selectedAssignment} 
+      <AssignmentDetailModal
+        isOpen={assignmentModalOpen}
+        onClose={() => setAssignmentModalOpen(false)}
+        assignment={selectedAssignment}
         onMarkComplete={handleMarkComplete}
       />
     </main>
