@@ -18,6 +18,10 @@ import AssignmentTypeIcon from '../icons/assignmentTypeIcons';
 export interface Assignment extends Omit<Task, 'id'> {
   id: string;  // Changed from number to string for unique keys
   type: string;  // Assignment type (Problem Set, Lab Report, etc.)
+  description: string;
+  submissionTypes: string[];
+  attachments: {name: string; url: string | null }[];
+  pointsPossible: string;
 }
 
 interface UpcomingAssignmentsProps {
