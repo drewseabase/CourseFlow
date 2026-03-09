@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSyncStatus } from '@/hooks/useSyncStatus';
 
 interface NavbarProps {
@@ -11,10 +11,11 @@ interface NavbarProps {
 
 export default function Navbar({ onAddEvent }: NavbarProps) {
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return localStorage.getItem('sidebarOpen') === 'true';
-  });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setMobileMenuOpen(localStorage.getItem('sidebarOpen') === 'true');
+  }, []);
 
   const { syncState, visible } = useSyncStatus();
 
